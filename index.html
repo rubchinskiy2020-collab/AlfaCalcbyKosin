@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AlfaCalc by Kosin</title>
+    <!-- PWA meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AlfaCalc">
+    <link rel="apple-touch-icon" href="https://alfabank.servicecdn.ru/icons/icon-192x192.png">
+    
+    <style>
+        :root {
+            --alfa-red: #EF3124;
+            --alfa-red-hover: #D7281D;
+            --alfa-black: #0B0F14;
+            --alfa-bg: #F4F6F9;
+            --alfa-card: #FFFFFF;
+            --alfa-text: #262626;
+            --alfa-muted: #8C95A3;
+            --alfa-border: #E2E5EB;
+            --alfa-green: #24C17E;
+            --alfa-green-hover: #1DB06F;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--alfa-bg);
+            color: var(--alfa-text);
+            padding-bottom: 40px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        header {
+            background-color: var(--alfa-card);
+            border-bottom: 1px solid var(--alfa-border);
+            padding: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .header-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title h1 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--alfa-black);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-title h1 span {
+            color: var(--alfa-red);
+        }
+
+        .logo-title .subtitle {
+            font-size: 11px;
+            color: var(--alfa-muted);
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            background: var(--alfa-bg);
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--alfa-black);
+            transition: background 0.2s;
+        }
+
+        .btn-icon:active {
+            background: var(--alfa-border);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 12px auto;
+            padding: 0 12px;
+        }
+
+        .card {
+            background: var(--alfa-card);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--alfa-border);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--alfa-black);
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Экран прибыли */
+        .profit-box {
+            background: linear-gradient(135deg, var(--alfa-red) 0%, #FF4B3E 100%);
+            color: white;
+            border: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .profit-box .label {
+            font-size: 13px;
+            opacity: 0.85;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profit-box .amount {
+            font-size: 32px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        /* Табы переключения Успешно/Неуспешно */
+        .status-tabs {
+            display: flex;
+            background: var(--alfa-bg);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--alfa-muted);
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active.success {
+            background: var(--alfa-card);
+            color: var(--alfa-green);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .tab-btn.active.fail {
+            background: var(--alfa-card);
+            color: var(--alfa-red);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        /* Формы */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--alfa-black);
+            margin-bottom: 6px;
+        }
+
+        .input-text, select, textarea {
+            width: 100%;
+            background: var(--alfa-bg);
+            border: 1px solid var(--alfa-border);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            color: var(--alfa-text);
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+
+        .input-text:focus, select:focus, textarea:focus {
+            border-color: var(--alfa-red);
+            background: var(--alfa-card);
+        }
+
+        /* Сетка для интерактивных кнопок-опций */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--alfa-bg);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: background 0.2s ease, color 0.15s ease, border-color 0.2s ease;
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-item .checkbox-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--alfa-text);
+            transition: color 0.15s ease;
+        }
+
+        .checkbox-item:has(input:checked) {
+            background: var(--alfa-green);
+            color: #FFFFFF;
+        }
+
+        .checkbox-item:has(input:checked) .checkbox-label {
+            color: #FFFFFF;
+        }
+
+        .checkbox-item:active {
+            opacity: 0.85;
+        }
+
+        /* Планирование (Назначено) */
+        .plan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .plan-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--alfa-bg);
+        }
+
+        .plan-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .plan-name {
+            font-weight: 500;
+        }
+
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-counter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--alfa-border);
+            background: var(--alfa-card);
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--alfa-black);
+        }
+
+        .btn-counter:active {
+            background: var(--alfa-bg);
+        }
+
+        .counter-value {
+            font-size: 15px;
+            font-weight: 700;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        /* Кнопки действий */
+        .btn-primary {
+            width: 100%;
+            background: var(--alfa-red);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(239, 49, 36, 0.2);
+            transition: background 0.2s;
+        }
+
+        .btn-primary:active {
+            background: var(--alfa-red-hover);
+        }
+
+        /* Зона отчета */
+        .report-preview {
+            background: var(--alfa-bg);
+            border: 1px solid var(--alfa-border);
+            border-radius: 10px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+
+        /* Список истории встреч */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .history-item {
+            background: var(--alfa-bg);
+            border: 1px solid var(--alfa-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .history-client {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--alfa-black);
+        }
+
+        .history-details {
+            font-size: 12px;
+            color: var(--alfa-text);
+        }
+
+        .history-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            width: fit-content;
+        }
+
+        .badge-success {
+            background: #E8F9F1;
+            color: var(--alfa-green);
+        }
+
+        .badge-fail {
+            background: #FEEBEA;
+            color: var(--alfa-red);
+        }
+
+        .btn-delete {
+            background: transparent;
+            border: none;
+            color: var(--alfa-red);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-delete:active {
+            background: #FEEBEA;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: var(--alfa-muted);
+            font-size: 13px;
+            padding: 15px 0;
+        }
+
+        /* Модалка настроек */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 15, 20, 0.5);
+            z-index: 200;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--alfa-card);
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 550px;
+            margin: 10px auto;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+
+        .setting-row label {
+            font-size: 14px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .setting-row input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--alfa-border);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .btn-remove-prod {
+            background: transparent;
+            border: none;
+            color: var(--alfa-red);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        /* Форма добавления нового продукта без кода */
+        .add-product-form {
+            background: var(--alfa-bg);
+            border: 1px dashed var(--alfa-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .add-product-form h4 {
+            font-size: 13px;
+            color: var(--alfa-black);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .add-inline-group {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .add-inline-group input, .add-inline-group select {
+            padding: 8px;
+            font-size: 13px;
+            border-radius: 8px;
+            border: 1px solid var(--alfa-border);
+            background: white;
+        }
+
+        /* Исправленное всплывающее уведомление (выровнено строго по центру) */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(11, 15, 20, 0.95);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            transition: transform 0.25s ease-out;
+            z-index: 300;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="logo-title">
+                <h1>Alfa<span>Calc</span></h1>
+                <div class="subtitle">by Kosin</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="openSettings()" title="Настройки цен">⚙️</button>
+                <button class="btn-icon" onclick="confirmReset()" title="Сбросить день">🔄</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Карточка прибыли -->
+        <div class="card profit-box">
+            <div class="label">Заработано за сегодня</div>
+            <div class="amount" id="today-profit">0 ₽</div>
+        </div>
+
+        <!-- Утреннее планирование -->
+        <div class="card">
+            <div class="card-title">1. Назначено</div>
+            <div class="plan-list" id="plan-container">
+                <!-- Заполняется динамически из JS -->
+            </div>
+        </div>
+
+        <!-- Добавление встречи -->
+        <div class="card">
+            <div class="card-title">2. Результат встречи</div>
+            
+            <div class="status-tabs">
+                <button id="btn-tab-success" class="tab-btn active success" onclick="setMeetingType(true)">Успешная</button>
+                <button id="btn-tab-fail" class="tab-btn fail" onclick="setMeetingType(false)">Неуспешная</button>
+            </div>
+
+            <div class="form-group">
+                <label for="client-info">ФИО / Номер клиента</label>
+                <input type="text" id="client-info" class="input-text" placeholder="Иванов И.И. / 1234">
+            </div>
+
+            <div class="form-group">
+                <label for="main-product-select">Основной продукт</label>
+                <select id="main-product-select">
+                    <!-- Заполняется динамически -->
+                </select>
+            </div>
+
+            <!-- Блок для УСПЕШНОЙ встречи -->
+            <div id="success-block">
+                <div class="form-group">
+                    <label>Кросс-продажи и опции</label>
+                    <div class="checkbox-grid" id="cross-container">
+                        <!-- Заполняется из JS -->
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Установка приложения</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="app-android">
+                            <span class="checkbox-label">Андроид</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="app-ios">
+                            <span class="checkbox-label">iOS</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="app-x5">
+                            <span class="checkbox-label">X5 (Пятерочка)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок для НЕУСПЕШНОЙ встречи -->
+            <div id="fail-block" style="display: none;">
+                <div class="form-group">
+                    <label for="fail-status-select">Статус неуспешной встречи</label>
+                    <select id="fail-status-select">
+                        <option value="НДЗ">НДЗ</option>
+                        <option value="Перенос встречи">Перенос встречи</option>
+                        <option value="Отказ банка/911">Отказ банка/911</option>
+                        <option value="Отказ банка до встречи">Отказ банка до встречи</option>
+                        <option value="Отказ клиента до встречи">Отказ клиента до встречи</option>
+                        <option value="Отказ клиента на встрече">Отказ клиента на встрече</option>
+                        <option value="Отмена встречи">Отмена встречи</option>
+                        <option value="Дубль">Дубль</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="meeting-comment">Комментарий</label>
+                <textarea id="meeting-comment" rows="2" placeholder="Оставьте комментарий, если нужно..."></textarea>
+            </div>
+
+            <button class="btn-primary" onclick="saveMeeting()">Сохранить и скопировать отчет встречи</button>
+        </div>
+
+        <!-- История встреч -->
+        <div class="card">
+            <div class="card-title">3. История встреч за сегодня</div>
+            <div class="history-list" id="history-list-container">
+                <!-- Сюда добавляются проведенные встречи -->
+            </div>
+        </div>
+
+        <!-- Итоговый отчет -->
+        <div class="card">
+            <div class="card-title">4. Итоговый отчет за день</div>
+            <div class="report-preview" id="day-report-preview">Здесь будет сформирован отчет...</div>
+            <button class="btn-primary" style="background-color: var(--alfa-black);" onclick="copyDayReport()">Скопировать отчет за день</button>
+        </div>
+
+    </div>
+
+    <!-- Модалка настроек -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="card-title">⚙️ Управление матрицей продуктов</div>
+            
+            <div class="add-product-form">
+                <h4>➕ Добавить новый продукт</h4>
+                <div class="add-inline-group">
+                    <input type="text" id="new-prod-name" placeholder="Название продукта (например: Премиум)" style="flex: 2;">
+                    <input type="number" id="new-prod-price" placeholder="Цена (₽)" style="flex: 1;">
+                </div>
+                <div class="add-inline-group">
+                    <select id="new-prod-type" style="flex: 1.5;">
+                        <option value="main">Основной продукт</option>
+                        <option value="cross">Кросс-продажа</option>
+                    </select>
+                    <button class="btn-primary" style="padding: 8px; width: auto; border-radius: 8px; font-size:13px; flex: 0.5;" onclick="addNewProduct()">ОК</button>
+                </div>
+            </div>
+
+            <div style="max-height: 320px; overflow-y: auto; margin-bottom: 20px;" id="prices-settings-list">
+                <!-- Заполняется динамически -->
+            </div>
+            <button class="btn-primary" onclick="closeSettings()">Сохранить и закрыть</button>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="toast" id="toast-msg">Отчет скопирован!</div>
+
+    <script>
+        const defaultMainProducts = {
+            "main_1": { name: "ДК", price: 310, assigned: 0 },
+            "main_2": { name: "Апельсинки", price: 310, assigned: 0 },
+            "main_3": { name: "КК", price: 570, assigned: 0 },
+            "main_4": { name: "Семейный", price: 270, assigned: 0 },
+            "main_5": { name: "Зпк", price: 310, assigned: 0 },
+            "main_6": { name: "Re", price: 310, assigned: 0 },
+            "main_7": { name: "Детская", price: 470, assigned: 0 },
+            "main_8": { name: "ТЭ", price: 590, assigned: 0 },
+            "main_9": { name: "Мп", price: 310, assigned: 0 }
+        };
+
+        const defaultCrossProducts = {
+            "cross_act": { name: "Активация", price: 0, isTextOnly: true },
+            "cross_tx1": { name: "Транзакция", price: 0, isTextOnly: true },
+            "cross_smart": { name: "Смарт", price: 30 },
+            "cross_ins": { name: "Коробочное страхование", price: 100 },
+            "cross_combo": { name: "Комбо", price: 570 },
+            "cross_tx2": { name: "Транзакция ", price: 0, isTextOnly: true },
+            "cross_kids_c": { name: "Детская карта", price: 0, isTextOnly: true },
+            "cross_bs": { name: "Бс", price: 0, isTextOnly: true },
+            "cross_bs_t": { name: "Пополнение Бс", price: 0, isTextOnly: true },
+            "cross_pens": { name: "Пенсия", price: 270 },
+            "cross_kk": { name: "Кросс КК", price: 570 },
+            "cross_dk": { name: "Кросс ДК", price: 310 },
+            "cross_stk": { name: "Кросс стикер", price: 310 },
+            "cross_kids_p": { name: "Кросс кидс", price: 470 },
+            "cross_qr": { name: "Кросс Апельсин по QR", price: 310 },
+            "cross_sf_kk": { name: "Сэлфи КК", price: 570 },
+            "cross_sf_dk": { name: "Сэлфи ДК", price: 310 },
+            "cross_cp": { name: "ЦП", price: 20 },
+            "cross_bs_d": { name: "БС сделка/пополнение", price: 100 },
+            "cross_ns": { name: "НС/ НС Миллионер", price: 0 }
+        };
+
+        let state = {
+            mainProducts: JSON.parse(JSON.stringify(defaultMainProducts)),
+            crossProducts: JSON.parse(JSON.stringify(defaultCrossProducts)),
+            meetings: [],
+            manualCrossAdjustments: {}
+        };
+
+        let isCurrentSuccess = true;
+
+        function loadState() {
+            const saved = localStorage.getItem('alfacalc_state_v5');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.mainProducts) state.mainProducts = parsed.mainProducts;
+                    if (parsed.crossProducts) state.crossProducts = parsed.crossProducts;
+                    if (parsed.meetings) state.meetings = parsed.meetings;
+                    if (parsed.manualCrossAdjustments) state.manualCrossAdjustments = parsed.manualCrossAdjustments;
+                } catch (e) {
+                    console.error("Ошибка загрузки данных", e);
+                }
+            }
+            renderAll();
+        }
+
+        function saveState() {
+            localStorage.setItem('alfacalc_state_v5', JSON.stringify(state));
+            renderAll();
+        }
+
+        function renderAll() {
+            const currentIssued = {};
+            const currentFailStatuses = { "НДЗ": 0, "Перенос встречи": 0, "Отказ банка/911": 0, "Отказ банка до встречи": 0, "Отказ клиента до встречи": 0, "Отказ клиента на встрече": 0, "Отмена встречи": 0, "Дубль": 0 };
+            const currentCrossCounts = {};
+            const currentApps = { android: 0, ios: 0, x5: 0 };
+            
+            for (let k in state.mainProducts) currentIssued[k] = 0;
+            for (let k in state.crossProducts) currentCrossCounts[k] = 0;
+
+            let totalProfit = 0;
+
+            state.meetings.forEach(m => {
+                if (m.isSuccess) {
+                    if (currentIssued[m.mainProductKey] !== undefined) currentIssued[m.mainProductKey]++;
+                    totalProfit += state.mainProducts[m.mainProductKey] ? state.mainProducts[m.mainProductKey].price : 0;
+                    
+                    m.crossKeys.forEach(ck => {
+                        if (currentCrossCounts[ck] !== undefined) currentCrossCounts[ck]++;
+                        totalProfit += state.crossProducts[ck] ? state.crossProducts[ck].price : 0;
+                    });
+
+                    if (m.apps.android) currentApps.android++;
+                    if (m.apps.ios) currentApps.ios++;
+                    if (m.apps.x5) currentApps.x5++;
+                } else {
+                    if (currentFailStatuses[m.failStatus] !== undefined) currentFailStatuses[m.failStatus]++;
+                }
+            });
+
+            for (let k in state.crossProducts) {
+                const adj = state.manualCrossAdjustments[k] || 0;
+                currentCrossCounts[k] += adj;
+                totalProfit += adj * state.crossProducts[k].price;
+            }
+
+            for (let k in state.mainProducts) {
+                if (currentIssued[k] > state.mainProducts[k].assigned) {
+                    state.mainProducts[k].assigned = currentIssued[k];
+                }
+            }
+
+            document.getElementById('today-profit').innerText = totalProfit + " ₽";
+
+            const planContainer = document.getElementById('plan-container');
+            planContainer.innerHTML = '';
+            for (let key in state.mainProducts) {
+                const p = state.mainProducts[key];
+                planContainer.innerHTML += `
+                    <div class="plan-item">
+                        <span class="plan-name">${p.name}</span>
+                        <div class="counter-controls">
+                            <button class="btn-counter" onclick="changeAssigned('${key}', -1)">-</button>
+                            <span class="counter-value">${p.assigned}</span>
+                            <button class="btn-counter" onclick="changeAssigned('${key}', 1)">+</button>
+                        </div>
+                    </div>`;
+            }
+
+            renderSelects();
+            renderCrossCheckboxes();
+
+            const historyContainer = document.getElementById('history-list-container');
+            historyContainer.innerHTML = '';
+            if (state.meetings.length === 0) {
+                historyContainer.innerHTML = '<div class="empty-history">Встреч сегодня еще не было</div>';
+            } else {
+                [...state.meetings].reverse().forEach(m => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    let detailsText = m.isSuccess ? `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey}` : `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey} • Статус: ${m.failStatus}`;
+                    if (m.isSuccess && m.crossKeys.length > 0) {
+                        detailsText += ` • Кроссы: ${m.crossKeys.map(ck => state.crossProducts[ck]?.name).filter(Boolean).join(', ')}`;
+                    }
+                    if (m.comment) detailsText += ` • <i>"${m.comment}"</i>`;
+
+                    item.innerHTML = `
+                        <div class="history-info">
+                            <span class="history-badge ${m.isSuccess ? 'badge-success' : 'badge-fail'}">${m.isSuccess ? 'УСПЕШНАЯ' : 'НЕУСПЕШНАЯ'}</span>
+                            <span class="history-client">${m.client}</span>
+                            <span class="history-details">${detailsText}</span>
+                        </div>
+                        <button class="btn-delete" onclick="deleteMeeting('${m.id}')">Удалить</button>
+                    `;
+                    historyContainer.appendChild(item);
+                });
+            }
+
+            const now = new Date();
+            const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
+            
+            let report = `Итоговый отчет за ${dateStr}
+
+Основные продукты
+`;
+            for (let key in state.mainProducts) {
+                report += `${state.mainProducts[key].name} назначено/выдано: ${state.mainProducts[key].assigned}/${currentIssued[key] || 0}
+`;
+            }
+
+            report += `
+Статусы встреч
+`;
+            for (let status in currentFailStatuses) {
+                report += `${status}: ${currentFailStatuses[status]}
+`;
+            }
+
+            report += `
+Кросс-продажи
+`;
+            for (let key in state.crossProducts) {
+                const cp = state.crossProducts[key];
+                if (cp.isTextOnly) continue;
+                
+                if (key === 'cross_combo' && state.crossProducts['cross_combo']) {
+                    report += `Кросс КК: ${(currentCrossCounts['cross_kk'] || 0) + (currentCrossCounts['cross_combo'] || 0)}
+`;
+                } else if (key === 'cross_kk') {
+                    // Пропуск
+                } else {
+                    report += `${cp.name}: ${currentCrossCounts[key] || 0}
+`;
+                }
+            }
+
+            report += `
+Установка приложения
+`;
+            report += `Андроид: ${currentApps.android}
+`;
+            report += `iOS: ${currentApps.ios}
+`;
+            report += `X5 (пятерочка): ${currentApps.x5}
+`;
+
+            document.getElementById('day-report-preview').innerText = report;
+        }
+
+        function changeAssigned(key, val) {
+            state.mainProducts[key].assigned = Math.max(0, state.mainProducts[key].assigned + val);
+            saveState();
+        }
+
+        function setMeetingType(isSuccess) {
+            isCurrentSuccess = isSuccess;
+            document.getElementById('btn-tab-success').classList.toggle('active', isSuccess);
+            document.getElementById('btn-tab-fail').classList.toggle('active', !isSuccess);
+            document.getElementById('success-block').style.display = isSuccess ? 'block' : 'none';
+            document.getElementById('fail-block').style.display = isSuccess ? 'none' : 'block';
+        }
+
+        function saveMeeting() {
+            const clientInput = document.getElementById('client-info').value.trim();
+            const client = clientInput || "Клиент без имени";
+            const mainProductKey = document.getElementById('main-product-select').value;
+            const comment = document.getElementById('meeting-comment').value.trim();
+            
+            if (!mainProductKey) {
+                alert("Добавьте продукты в матрицу!");
+                return;
+            }
+
+            const newMeeting = {
+                id: 'meet_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+                client: client,
+                mainProductKey: mainProductKey,
+                comment: comment,
+                isSuccess: isCurrentSuccess,
+                crossKeys: [],
+                apps: { android: false, ios: false, x5: false }
+            };
+
+            let singleReportText = "";
+            const mainProdName = state.mainProducts[mainProductKey]?.name || mainProductKey;
+
+            if (isCurrentSuccess) {
+                singleReportText += `${mainProdName}
+${client}
+`;
+
+                for (let key in state.crossProducts) {
+                    const cb = document.getElementById(`cross-${key}`);
+                    if (cb && cb.checked) {
+                        newMeeting.crossKeys.push(key);
+                        singleReportText += `${state.crossProducts[key].name}
+`;
+                    }
+                }
+
+                if (document.getElementById('app-android').checked) newMeeting.apps.android = true;
+                if (document.getElementById('app-ios').checked) newMeeting.apps.ios = true;
+                if (document.getElementById('app-x5').checked) newMeeting.apps.x5 = true;
+
+                if (comment) singleReportText += `Комментарий: ${comment}`;
+                else singleReportText += `Комментарий: -`;
+
+            } else {
+                const failStatus = document.getElementById('fail-status-select').value;
+                newMeeting.failStatus = failStatus;
+
+                singleReportText += `Информация по не успешным встречам
+
+${mainProdName}
+${client}
+${failStatus}
+`;
+                if (comment) singleReportText += `Комментарий: ${comment}`;
+                else singleReportText += `Комментарий: -`;
+            }
+
+            state.meetings.push(newMeeting);
+            saveState();
+
+            copyToClipboard(singleReportText);
+            showToast("Отчет встречи в буфере!");
+
+            document.getElementById('client-info').value = "";
+            document.getElementById('meeting-comment').value = "";
+            for (let key in state.crossProducts) {
+                const cb = document.getElementById(`cross-${key}`);
+                if (cb) cb.checked = false;
+            }
+            document.getElementById('app-android').checked = false;
+            document.getElementById('app-ios').checked = false;
+            document.getElementById('app-x5').checked = false;
+        }
+
+        function deleteMeeting(id) {
+            if (confirm("Удалить встречу?")) {
+                state.meetings = state.meetings.filter(m => m.id !== id);
+                saveState();
+            }
+        }
+
+        function renderSelects() {
+            const select = document.getElementById('main-product-select');
+            const currentVal = select.value;
+            select.innerHTML = '';
+            for (let key in state.mainProducts) {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.innerText = state.mainProducts[key].name;
+                select.appendChild(opt);
+            }
+            if (state.mainProducts[currentVal]) select.value = currentVal;
+        }
+
+        function renderCrossCheckboxes() {
+            const container = document.getElementById('cross-container');
+            const checkedStates = {};
+            for (let key in state.crossProducts) {
+                const cb = document.getElementById(`cross-${key}`);
+                if (cb) checkedStates[key] = cb.checked;
+            }
+
+            container.innerHTML = '';
+            for (let key in state.crossProducts) {
+                const cp = state.crossProducts[key];
+                
+                const label = document.createElement('label');
+                label.className = 'checkbox-item';
+                label.innerHTML = `
+                    <input type="checkbox" id="cross-${key}">
+                    <span class="checkbox-label">${cp.name}</span>
+                `;
+                container.appendChild(label);
+                
+                if (checkedStates[key]) {
+                    document.getElementById(`cross-${key}`).checked = true;
+                }
+            }
+        }
+
+        function addNewProduct() {
+            const name = document.getElementById('new-prod-name').value.trim();
+            const price = parseInt(document.getElementById('new-prod-price').value) || 0;
+            const type = document.getElementById('new-prod-type').value;
+
+            if (!name) {
+                alert("Введите название продукта!");
+                return;
+            }
+
+            const generatedId = (type === 'main' ? 'main_' : 'cross_') + Date.now();
+
+            if (type === 'main') {
+                state.mainProducts[generatedId] = { name: name, price: price, assigned: 0 };
+            } else {
+                state.crossProducts[generatedId] = { name: name, price: price };
+            }
+
+            document.getElementById('new-prod-name').value = "";
+            document.getElementById('new-prod-price').value = 0;
+
+            saveState();
+            openSettings();
+            showToast("Продукт успешно добавлен!");
+        }
+
+        function removeProduct(type, key) {
+            if (confirm("Удалить продукт?")) {
+                if (type === 'main') delete state.mainProducts[key];
+                else {
+                    delete state.crossProducts[key];
+                    delete state.manualCrossAdjustments[key];
+                }
+                saveState();
+                openSettings();
+            }
+        }
+
+        function copyDayReport() {
+            copyToClipboard(document.getElementById('day-report-preview').innerText);
+            showToast("Дневной отчет скопирован!");
+        }
+
+        function copyToClipboard(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-msg');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+        }
+
+        function openSettings() {
+            const listContainer = document.getElementById('prices-settings-list');
+            listContainer.innerHTML = '<h3 style="font-size:14px; margin-bottom:10px;">Основные продукты:</h3>';
+            
+            for (let key in state.mainProducts) {
+                const p = state.mainProducts[key];
+                listContainer.innerHTML += `
+                    <div class="setting-row">
+                        <label>${p.name}</label>
+                        <input type="number" id="set-main-${key}" value="${p.price}">
+                        <button class="btn-remove-prod" onclick="removeProduct('main', '${key}')">🗑️</button>
+                    </div>`;
+            }
+
+            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:15px; margin-bottom:10px;">Кросс-продажи (Цены в ₽):</h3>';
+            for (let key in state.crossProducts) {
+                const cp = state.crossProducts[key];
+                listContainer.innerHTML += `
+                    <div class="setting-row">
+                        <label>${cp.name}</label>
+                        <input type="number" id="set-cross-${key}" value="${cp.price}">
+                        <button class="btn-remove-prod" onclick="removeProduct('cross', '${key}')">🗑️</button>
+                    </div>`;
+            }
+
+            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:15px; margin-bottom:5px; color:var(--alfa-red);">Прямая докрутка счетчиков за день (ШТ):</h3>';
+            for (let key in state.crossProducts) {
+                const cp = state.crossProducts[key];
+                const currentVal = state.manualCrossAdjustments[key] || 0;
+                listContainer.innerHTML += `<div class="setting-row"><label style="color:#555;">${cp.name}</label><input type="number" id="count-cross-${key}" value="${currentVal}"></div>`;
+            }
+
+            document.getElementById('settings-modal').style.display = 'block';
+        }
+
+        function closeSettings() {
+            for (let key in state.mainProducts) {
+                const input = document.getElementById(`set-main-${key}`);
+                if (input) state.mainProducts[key].price = parseInt(input.value) || 0;
+            }
+            for (let key in state.crossProducts) {
+                const inputPrice = document.getElementById(`set-cross-${key}`);
+                if (inputPrice) state.crossProducts[key].price = parseInt(inputPrice.value) || 0;
+                
+                const inputCount = document.getElementById(`count-cross-${key}`);
+                if (inputCount) state.manualCrossAdjustments[key] = parseInt(inputCount.value) || 0;
+            }
+            document.getElementById('settings-modal').style.display = 'none';
+            saveState();
+        }
+
+        function confirmReset() {
+            if (confirm("Сбросить результаты дня? Все проведенные встречи, заработанные деньги и ручные докрутки обнулятся. Ваши добавленные продукты и настроенные цены ОСТАНУТСЯ.")) {
+                state.meetings = []; 
+                state.manualCrossAdjustments = {}; 
+                
+                for (let key in state.mainProducts) {
+                    state.mainProducts[key].assigned = 0;
+                }
+                
+                saveState();
+                showToast("День обнулен. Цены сохранены!");
+            }
+        }
+
+        window.onload = function() {
+            loadState();
+        };
+    </script>
+</body>
+</html>
