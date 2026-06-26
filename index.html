@@ -129,13 +129,14 @@
             align-items: center;
         }
 
-        /* Экран прибыли */
+        /* Экраны прибыли */
         .profit-box {
             background: linear-gradient(135deg, var(--alfa-red) 0%, #FF4B3E 100%);
             color: white;
             border: none;
             text-align: center;
-            padding: 20px;
+            padding: 16px;
+            margin-bottom: 8px;
         }
         
         .profit-box .label {
@@ -147,9 +148,34 @@
         }
 
         .profit-box .amount {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
-            margin-top: 4px;
+            margin-top: 2px;
+        }
+
+        .potential-box {
+            background: #EEEFF2;
+            color: var(--alfa-black);
+            border: 1px solid var(--alfa-border);
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .potential-box .label {
+            font-size: 11px;
+            color: var(--alfa-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .potential-box .amount {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 1px;
+            color: var(--alfa-text);
         }
 
         /* Табы переключения Успешно/Неуспешно */
@@ -269,7 +295,7 @@
             opacity: 0.85;
         }
 
-        /* Планирование (Назначено) */
+        /* Назначено */
         .plan-list {
             display: flex;
             flex-direction: column;
@@ -462,27 +488,61 @@
             margin: 10px auto;
         }
 
+        /* ЖЕСТКОЕ ВЫРАВНИВАНИЕ СТРОКИ НАСТРОЕК */
         .setting-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            background: var(--alfa-bg);
+            padding: 8px 12px;
+            border-radius: 12px;
             gap: 10px;
         }
 
         .setting-row label {
             font-size: 14px;
-            font-weight: 500;
-            flex: 1;
+            font-weight: 600;
+            color: var(--alfa-text);
+            flex: 1; /* Занимает всё свободное место слева */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Фиксированное аккуратное окошко цены */
+        .setting-row .price-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
         }
 
         .setting-row input {
             width: 80px;
-            padding: 8px;
+            height: 36px;
+            padding: 0 8px;
             border: 1px solid var(--alfa-border);
             border-radius: 8px;
             text-align: center;
             font-size: 14px;
+            font-weight: 700;
+            background: var(--alfa-card);
+            color: var(--alfa-black);
+            outline: none;
+            transition: border-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .setting-row input:focus {
+            border-color: var(--alfa-red);
+        }
+
+        .setting-row .currency-sign {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--alfa-muted);
+            width: 12px;
         }
 
         .btn-remove-prod {
@@ -491,7 +551,16 @@
             color: var(--alfa-red);
             font-size: 16px;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 6px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .btn-remove-prod:active {
+            background: #FEEBEA;
         }
 
         /* Форма добавления нового продукта без кода */
@@ -526,7 +595,7 @@
             background: white;
         }
 
-        /* Исправленное всплывающее уведомление (выровнено строго по центру) */
+        /* Всплывающее уведомление */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -534,7 +603,7 @@
             transform: translateX(-50%) translateY(100px);
             background: rgba(11, 15, 20, 0.95);
             color: white;
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 30px;
             font-size: 14px;
             font-weight: 600;
@@ -568,21 +637,27 @@
 
     <div class="container">
         
-        <!-- Карточка прибыли -->
+        <!-- Карточка прибыли за день -->
         <div class="card profit-box">
             <div class="label">Заработано за сегодня</div>
             <div class="amount" id="today-profit">0 ₽</div>
         </div>
 
-        <!-- Утреннее планирование -->
+        <!-- Карточка потенциала -->
+        <div class="potential-box">
+            <div class="label">Потенциал на день (план)</div>
+            <div class="amount" id="potential-profit">0 ₽</div>
+        </div>
+
+        <!-- Блок 1: Назначено -->
         <div class="card">
             <div class="card-title">1. Назначено</div>
             <div class="plan-list" id="plan-container">
-                <!-- Заполняется динамически из JS -->
+                <!-- Заполняется динамически -->
             </div>
         </div>
 
-        <!-- Добавление встречи -->
+        <!-- Блок 2: Результат встречи -->
         <div class="card">
             <div class="card-title">2. Результат встречи</div>
             
@@ -656,7 +731,7 @@
             <button class="btn-primary" onclick="saveMeeting()">Сохранить и скопировать отчет встречи</button>
         </div>
 
-        <!-- История встреч -->
+        <!-- Блок 3: История встреч -->
         <div class="card">
             <div class="card-title">3. История встреч за сегодня</div>
             <div class="history-list" id="history-list-container">
@@ -664,7 +739,7 @@
             </div>
         </div>
 
-        <!-- Итоговый отчет -->
+        <!-- Блок 4: Итоговый отчет за день -->
         <div class="card">
             <div class="card-title">4. Итоговый отчет за день</div>
             <div class="report-preview" id="day-report-preview">Здесь будет сформирован отчет...</div>
@@ -729,13 +804,13 @@
             "cross_pens": { name: "Пенсия", price: 270 },
             "cross_kk": { name: "Кросс КК", price: 570 },
             "cross_dk": { name: "Кросс ДК", price: 310 },
-            "cross_stk": { name: "Кросс стикер", price: 310 },
-            "cross_kids_p": { name: "Кросс кидс", price: 470 },
+            "cross_sticker": { name: "Кросс стикер", price: 310 },
+            "cross_kids": { name: "Кросс кидс", price: 470 },
             "cross_qr": { name: "Кросс Апельсин по QR", price: 310 },
-            "cross_sf_kk": { name: "Сэлфи КК", price: 570 },
-            "cross_sf_dk": { name: "Сэлфи ДК", price: 310 },
+            "cross_selfie_kk": { name: "Сэлфи КК", price: 570 },
+            "cross_selfie_dk": { name: "Сэлфи ДК", price: 310 },
             "cross_cp": { name: "ЦП", price: 20 },
-            "cross_bs_d": { name: "БС сделка/пополнение", price: 100 },
+            "cross_bs_deal": { name: "БС сделка/пополнение", price: 100 },
             "cross_ns": { name: "НС/ НС Миллионер", price: 0 }
         };
 
@@ -779,6 +854,11 @@
             for (let k in state.crossProducts) currentCrossCounts[k] = 0;
 
             let totalProfit = 0;
+            let potentialProfit = 0;
+
+            for (let k in state.mainProducts) {
+                potentialProfit += state.mainProducts[k].assigned * state.mainProducts[k].price;
+            }
 
             state.meetings.forEach(m => {
                 if (m.isSuccess) {
@@ -807,10 +887,12 @@
             for (let k in state.mainProducts) {
                 if (currentIssued[k] > state.mainProducts[k].assigned) {
                     state.mainProducts[k].assigned = currentIssued[k];
+                    potentialProfit += (state.mainProducts[k].assigned - currentIssued[k] + 1) * state.mainProducts[k].price;
                 }
             }
 
             document.getElementById('today-profit').innerText = totalProfit + " ₽";
+            document.getElementById('potential-profit').innerText = potentialProfit + " ₽";
 
             const planContainer = document.getElementById('plan-container');
             planContainer.innerHTML = '';
@@ -945,16 +1027,13 @@
             const mainProdName = state.mainProducts[mainProductKey]?.name || mainProductKey;
 
             if (isCurrentSuccess) {
-                singleReportText += `${mainProdName}
-${client}
-`;
+                singleReportText += `${mainProdName}\n${client}\n`;
 
                 for (let key in state.crossProducts) {
                     const cb = document.getElementById(`cross-${key}`);
                     if (cb && cb.checked) {
                         newMeeting.crossKeys.push(key);
-                        singleReportText += `${state.crossProducts[key].name}
-`;
+                        singleReportText += `${state.crossProducts[key].name}\n`;
                     }
                 }
 
@@ -962,21 +1041,22 @@ ${client}
                 if (document.getElementById('app-ios').checked) newMeeting.apps.ios = true;
                 if (document.getElementById('app-x5').checked) newMeeting.apps.x5 = true;
 
-                if (comment) singleReportText += `Комментарий: ${comment}`;
-                else singleReportText += `Комментарий: -`;
+                if (comment) {
+                    singleReportText += `Комментарий: ${comment}`;
+                } else {
+                    if (singleReportText.endsWith('\n')) {
+                        singleReportText = singleReportText.slice(0, -1);
+                    }
+                }
 
             } else {
                 const failStatus = document.getElementById('fail-status-select').value;
                 newMeeting.failStatus = failStatus;
 
-                singleReportText += `Информация по не успешным встречам
-
-${mainProdName}
-${client}
-${failStatus}
-`;
-                if (comment) singleReportText += `Комментарий: ${comment}`;
-                else singleReportText += `Комментарий: -`;
+                singleReportText += `${mainProdName}\n${client}\n${failStatus}`;
+                if (comment) {
+                    singleReportText += `\nКомментарий: ${comment}`;
+                }
             }
 
             state.meetings.push(newMeeting);
@@ -1103,34 +1183,48 @@ ${failStatus}
 
         function openSettings() {
             const listContainer = document.getElementById('prices-settings-list');
-            listContainer.innerHTML = '<h3 style="font-size:14px; margin-bottom:10px;">Основные продукты:</h3>';
+            listContainer.innerHTML = '<h3 style="font-size:14px; margin-bottom:10px; color:var(--alfa-black);">Основные продукты:</h3>';
             
             for (let key in state.mainProducts) {
                 const p = state.mainProducts[key];
                 listContainer.innerHTML += `
                     <div class="setting-row">
                         <label>${p.name}</label>
-                        <input type="number" id="set-main-${key}" value="${p.price}">
+                        <div class="price-input-wrapper">
+                            <input type="number" id="set-main-${key}" value="${p.price}">
+                            <span class="currency-sign">₽</span>
+                        </div>
                         <button class="btn-remove-prod" onclick="removeProduct('main', '${key}')">🗑️</button>
                     </div>`;
             }
 
-            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:15px; margin-bottom:10px;">Кросс-продажи (Цены в ₽):</h3>';
+            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:20px; margin-bottom:10px; color:var(--alfa-black);">Кросс-продажи:</h3>';
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
                 listContainer.innerHTML += `
                     <div class="setting-row">
                         <label>${cp.name}</label>
-                        <input type="number" id="set-cross-${key}" value="${cp.price}">
+                        <div class="price-input-wrapper">
+                            <input type="number" id="set-cross-${key}" value="${cp.price}">
+                            <span class="currency-sign">₽</span>
+                        </div>
                         <button class="btn-remove-prod" onclick="removeProduct('cross', '${key}')">🗑️</button>
                     </div>`;
             }
 
-            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:15px; margin-bottom:5px; color:var(--alfa-red);">Прямая докрутка счетчиков за день (ШТ):</h3>';
+            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:20px; margin-bottom:5px; color:var(--alfa-red);">Прямая докрутка счетчиков за день (ШТ):</h3>';
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
                 const currentVal = state.manualCrossAdjustments[key] || 0;
-                listContainer.innerHTML += `<div class="setting-row"><label style="color:#555;">${cp.name}</label><input type="number" id="count-cross-${key}" value="${currentVal}"></div>`;
+                listContainer.innerHTML += `
+                    <div class="setting-row">
+                        <label style="color:#555;">${cp.name}</label>
+                        <div class="price-input-wrapper">
+                            <input type="number" id="count-cross-${key}" value="${currentVal}">
+                            <span class="currency-sign" style="visibility:hidden;">₽</span>
+                        </div>
+                        <div style="width:28px;"></div> <!-- распорка вместо урны -->
+                    </div>`;
             }
 
             document.getElementById('settings-modal').style.display = 'block';
