@@ -22,6 +22,7 @@
             --alfa-border: #E2E5EB;
             --alfa-green: #24C17E;
             --alfa-green-hover: #1DB06F;
+            --alfa-purple: #6A1B9A;
         }
 
         * {
@@ -35,7 +36,7 @@
         body {
             background-color: var(--alfa-bg);
             color: var(--alfa-text);
-            padding-bottom: 40px;
+            padding-bottom: 75px;
             font-size: 15px;
             line-height: 1.4;
         }
@@ -129,7 +130,6 @@
             align-items: center;
         }
 
-        /* Экраны прибыли */
         .profit-box {
             background: linear-gradient(135deg, var(--alfa-red) 0%, #FF4B3E 100%);
             color: white;
@@ -178,7 +178,6 @@
             color: var(--alfa-text);
         }
 
-        /* Табы переключения Успешно/Неуспешно */
         .status-tabs {
             display: flex;
             background: var(--alfa-bg);
@@ -212,7 +211,6 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
-        /* Формы */
         .form-group {
             margin-bottom: 14px;
         }
@@ -243,7 +241,6 @@
             background: var(--alfa-card);
         }
 
-        /* Сетка для интерактивных кнопок-опций */
         .checkbox-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -295,7 +292,6 @@
             opacity: 0.85;
         }
 
-        /* Назначено */
         .plan-list {
             display: flex;
             flex-direction: column;
@@ -351,7 +347,6 @@
             text-align: center;
         }
 
-        /* Кнопки действий */
         .btn-primary {
             width: 100%;
             background: var(--alfa-red);
@@ -370,7 +365,6 @@
             background: var(--alfa-red-hover);
         }
 
-        /* Зона отчета */
         .report-preview {
             background: var(--alfa-bg);
             border: 1px solid var(--alfa-border);
@@ -384,7 +378,6 @@
             margin-bottom: 12px;
         }
 
-        /* Список истории встреч */
         .history-list {
             display: flex;
             flex-direction: column;
@@ -466,7 +459,6 @@
             padding: 15px 0;
         }
 
-        /* Модалка настроек */
         .modal {
             display: none;
             position: fixed;
@@ -488,7 +480,6 @@
             margin: 10px auto;
         }
 
-        /* ЖЕСТКОЕ ВЫРАВНИВАНИЕ СТРОКИ НАСТРОЕК */
         .setting-row {
             display: flex;
             align-items: center;
@@ -504,13 +495,12 @@
             font-size: 14px;
             font-weight: 600;
             color: var(--alfa-text);
-            flex: 1; /* Занимает всё свободное место слева */
+            flex: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Фиксированное аккуратное окошко цены */
         .setting-row .price-input-wrapper {
             display: flex;
             align-items: center;
@@ -563,7 +553,6 @@
             background: #FEEBEA;
         }
 
-        /* Форма добавления нового продукта без кода */
         .add-product-form {
             background: var(--alfa-bg);
             border: 1px dashed var(--alfa-border);
@@ -595,10 +584,190 @@
             background: white;
         }
 
-        /* Всплывающее уведомление */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--alfa-card);
+            border-top: 1px solid var(--alfa-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 150;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            background: none;
+            border: none;
+            color: var(--alfa-muted);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 20px;
+        }
+
+        .nav-item.active {
+            color: var(--alfa-red);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .calendar-month-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--alfa-black);
+            text-transform: capitalize;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .day-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--alfa-muted);
+            padding: 4px 0;
+        }
+
+        .day-cell {
+            background: var(--alfa-bg);
+            border-radius: 10px;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .day-cell.today {
+            border-color: var(--alfa-black);
+        }
+
+        .day-cell.work {
+            background: var(--alfa-red);
+            color: white;
+        }
+
+        .day-cell.trip {
+            background: var(--alfa-purple);
+            color: white;
+        }
+
+        .day-cell.off {
+            background: #E2E5EB;
+            color: var(--alfa-muted);
+        }
+
+        .day-cell .day-icon {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .calendar-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            background: var(--alfa-bg);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 14px;
+            text-align: center;
+        }
+
+        .stat-item .stat-value {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--alfa-black);
+        }
+
+        .stat-item .stat-label {
+            font-size: 11px;
+            color: var(--alfa-muted);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .day-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn-day-status {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* СТИЛИ ДЛЯ ВКЛАДКИ «ПЛАН НА ДЕНЬ» */
+        .plan-target-item {
+            background: var(--alfa-bg);
+            border: 1px solid var(--alfa-border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .plan-target-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .plan-target-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--alfa-black);
+        }
+
+        .plan-target-sub {
+            font-size: 13px;
+            color: var(--alfa-muted);
+            font-weight: 600;
+        }
+
         .toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 85px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
             background: rgba(11, 15, 20, 0.95);
@@ -635,29 +804,24 @@
         </div>
     </header>
 
-    <div class="container">
+    <!-- ВКЛАДКА 1: КАЛЬКУЛЯТОР -->
+    <div id="tab-calc" class="container">
         
-        <!-- Карточка прибыли за день -->
         <div class="card profit-box">
             <div class="label">Заработано за сегодня</div>
             <div class="amount" id="today-profit">0 ₽</div>
         </div>
 
-        <!-- Карточка потенциала -->
         <div class="potential-box">
             <div class="label">Потенциал на день (план)</div>
             <div class="amount" id="potential-profit">0 ₽</div>
         </div>
 
-        <!-- Блок 1: Назначено -->
         <div class="card">
             <div class="card-title">1. Назначено</div>
-            <div class="plan-list" id="plan-container">
-                <!-- Заполняется динамически -->
-            </div>
+            <div class="plan-list" id="plan-container"></div>
         </div>
 
-        <!-- Блок 2: Результат встречи -->
         <div class="card">
             <div class="card-title">2. Результат встречи</div>
             
@@ -673,18 +837,13 @@
 
             <div class="form-group">
                 <label for="main-product-select">Основной продукт</label>
-                <select id="main-product-select">
-                    <!-- Заполняется динамически -->
-                </select>
+                <select id="main-product-select"></select>
             </div>
 
-            <!-- Блок для УСПЕШНОЙ встречи -->
             <div id="success-block">
                 <div class="form-group">
                     <label>Кросс-продажи и опции</label>
-                    <div class="checkbox-grid" id="cross-container">
-                        <!-- Заполняется из JS -->
-                    </div>
+                    <div class="checkbox-grid" id="cross-container"></div>
                 </div>
                 
                 <div class="form-group">
@@ -706,7 +865,6 @@
                 </div>
             </div>
 
-            <!-- Блок для НЕУСПЕШНОЙ встречи -->
             <div id="fail-block" style="display: none;">
                 <div class="form-group">
                     <label for="fail-status-select">Статус неуспешной встречи</label>
@@ -731,15 +889,11 @@
             <button class="btn-primary" onclick="saveMeeting()">Сохранить и скопировать отчет встречи</button>
         </div>
 
-        <!-- Блок 3: История встреч -->
         <div class="card">
             <div class="card-title">3. История встреч за сегодня</div>
-            <div class="history-list" id="history-list-container">
-                <!-- Сюда добавляются проведенные встречи -->
-            </div>
+            <div class="history-list" id="history-list-container"></div>
         </div>
 
-        <!-- Блок 4: Итоговый отчет за день -->
         <div class="card">
             <div class="card-title">4. Итоговый отчет за день</div>
             <div class="report-preview" id="day-report-preview">Здесь будет сформирован отчет...</div>
@@ -748,7 +902,107 @@
 
     </div>
 
-    <!-- Модалка настроек -->
+    <!-- ВКЛАДКА 2: ПЛАН НА ДЕНЬ -->
+    <div id="tab-day-plan" class="container" style="display: none;">
+        <div class="card">
+            <div class="card-title">🎯 Добавить задачу в план</div>
+            <div class="add-inline-group" style="margin-bottom: 0;">
+                <input type="text" id="target-prod-name" placeholder="Название продукта (например: КК)" style="flex: 2;">
+                <input type="number" id="target-prod-goal" placeholder="План (шт)" style="flex: 1;" min="1">
+                <button class="btn-primary" style="padding: 10px 14px; width: auto; font-size:14px; flex: 0.5;" onclick="addDayPlanTarget()">➕</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span>📋 Задачи на сегодня</span>
+                <button class="btn-delete" style="font-size:12px;" onclick="clearDayPlanTargets()">Очистить план</button>
+            </div>
+            
+            <div id="day-plan-list"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📄 Отчет по плану</div>
+            <div class="report-preview" id="plan-report-preview">План пока пуст...</div>
+            <button class="btn-primary" style="background-color: var(--alfa-black);" onclick="copyPlanReport()">Скопировать отчет План на день</button>
+        </div>
+    </div>
+
+    <!-- ВКЛАДКА 3: ГРАФИК РАБОТЫ -->
+    <div id="tab-schedule" class="container" style="display: none;">
+        <div class="card">
+            <div class="calendar-header">
+                <button class="btn-icon" onclick="changeMonth(-1)">◀</button>
+                <div class="calendar-month-title" id="calendar-title">Месяц 2026</div>
+                <button class="btn-icon" onclick="changeMonth(1)">▶</button>
+            </div>
+
+            <div class="calendar-grid" id="calendar-days-header">
+                <div class="day-name">Пн</div>
+                <div class="day-name">Вт</div>
+                <div class="day-name">Ср</div>
+                <div class="day-name">Чт</div>
+                <div class="day-name">Пт</div>
+                <div class="day-name" style="color:var(--alfa-red);">Сб</div>
+                <div class="day-name" style="color:var(--alfa-red);">Вс</div>
+            </div>
+
+            <div class="calendar-grid" id="calendar-grid" style="margin-top: 6px;"></div>
+
+            <div class="calendar-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-total-work">0</div>
+                    <div class="stat-label">Всего смен</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color:var(--alfa-purple);" id="stat-trip-work">0</div>
+                    <div class="stat-label">Из них выездов 🚘</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-passed-work">0</div>
+                    <div class="stat-label">Отработано</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color:var(--alfa-red);" id="stat-left-work">0</div>
+                    <div class="stat-label">Осталось смен</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="nav-calc" onclick="switchTab('calc')">
+            <span class="nav-icon">🧮</span>
+            <span>Калькулятор</span>
+        </button>
+        <button class="nav-item" id="nav-day-plan" onclick="switchTab('day-plan')">
+            <span class="nav-icon">📋</span>
+            <span>План</span>
+        </button>
+        <button class="nav-item" id="nav-schedule" onclick="switchTab('schedule')">
+            <span class="nav-icon">📅</span>
+            <span>График</span>
+        </button>
+    </nav>
+
+    <!-- Модалка управления днем -->
+    <div class="modal" id="day-modal">
+        <div class="modal-content" style="max-width: 380px;">
+            <div class="card-title" id="day-modal-title">Настройка дня</div>
+            <p style="font-size:13px; color:var(--alfa-muted); margin-bottom:15px;">Выберите тип дня:</p>
+            <div class="day-actions">
+                <button class="btn-day-status" style="background:var(--alfa-red); color:white;" onclick="setDayStatus('work')">💼 Рабочий (Офис/Город)</button>
+                <button class="btn-day-status" style="background:var(--alfa-purple); color:white;" onclick="setDayStatus('trip')">🚘 Выезд в НП</button>
+                <button class="btn-day-status" style="background:#E2E5EB; color:var(--alfa-black);" onclick="setDayStatus('off')">🏖️ Выходной</button>
+            </div>
+            <button class="btn-primary" style="margin-top:12px; background:var(--alfa-black);" onclick="setDayStatus('none')">Очистить статус</button>
+            <button class="btn-delete" style="width:100%; margin-top:8px;" onclick="closeDayModal()">Отмена</button>
+        </div>
+    </div>
+
+    <!-- Модалка настроек цен -->
     <div class="modal" id="settings-modal">
         <div class="modal-content">
             <div class="card-title">⚙️ Управление матрицей продуктов</div>
@@ -756,7 +1010,7 @@
             <div class="add-product-form">
                 <h4>➕ Добавить новый продукт</h4>
                 <div class="add-inline-group">
-                    <input type="text" id="new-prod-name" placeholder="Название продукта (например: Премиум)" style="flex: 2;">
+                    <input type="text" id="new-prod-name" placeholder="Название продукта" style="flex: 2;">
                     <input type="number" id="new-prod-price" placeholder="Цена (₽)" style="flex: 1;">
                 </div>
                 <div class="add-inline-group">
@@ -768,14 +1022,11 @@
                 </div>
             </div>
 
-            <div style="max-height: 320px; overflow-y: auto; margin-bottom: 20px;" id="prices-settings-list">
-                <!-- Заполняется динамически -->
-            </div>
+            <div style="max-height: 320px; overflow-y: auto; margin-bottom: 20px;" id="prices-settings-list"></div>
             <button class="btn-primary" onclick="closeSettings()">Сохранить и закрыть</button>
         </div>
     </div>
 
-    <!-- Уведомление -->
     <div class="toast" id="toast-msg">Отчет скопирован!</div>
 
     <script>
@@ -794,23 +1045,22 @@
         const defaultCrossProducts = {
             "cross_act": { name: "Активация", price: 0, isTextOnly: true },
             "cross_tx1": { name: "Транзакция", price: 0, isTextOnly: true },
-            "cross_smart": { name: "Смарт", price: 30 },
-            "cross_ins": { name: "Коробочное страхование", price: 100 },
-            "cross_combo": { name: "Комбо", price: 570 },
-            "cross_tx2": { name: "Транзакция ", price: 0, isTextOnly: true },
+            "cross_smart": { name: "Смарт", price: 0 },
+            "cross_ins": { name: "Коробочное страхование", price: 0 },
+            "cross_combo": { name: "Комбо", price: 0 },
             "cross_kids_c": { name: "Детская карта", price: 0, isTextOnly: true },
             "cross_bs": { name: "Бс", price: 0, isTextOnly: true },
             "cross_bs_t": { name: "Пополнение Бс", price: 0, isTextOnly: true },
-            "cross_pens": { name: "Пенсия", price: 270 },
-            "cross_kk": { name: "Кросс КК", price: 570 },
-            "cross_dk": { name: "Кросс ДК", price: 310 },
-            "cross_sticker": { name: "Кросс стикер", price: 310 },
-            "cross_kids": { name: "Кросс кидс", price: 470 },
-            "cross_qr": { name: "Кросс Апельсин по QR", price: 310 },
-            "cross_selfie_kk": { name: "Сэлфи КК", price: 570 },
-            "cross_selfie_dk": { name: "Сэлфи ДК", price: 310 },
-            "cross_cp": { name: "ЦП", price: 20 },
-            "cross_bs_deal": { name: "БС сделка/пополнение", price: 100 },
+            "cross_pens": { name: "Пенсия", price: 0 },
+            "cross_kk": { name: "Кросс КК", price: 0 },
+            "cross_dk": { name: "Кросс ДК", price: 0 },
+            "cross_sticker": { name: "Кросс стикер", price: 0 },
+            "cross_kids": { name: "Кросс кидс", price: 0 },
+            "cross_qr": { name: "Кросс Апельсин по QR", price: 0 },
+            "cross_selfie_kk": { name: "Сэлфи КК", price: 0 },
+            "cross_selfie_dk": { name: "Сэлфи ДК", price: 0 },
+            "cross_cp": { name: "ЦП", price: 0 },
+            "cross_bs_deal": { name: "БС сделка/пополнение", price: 0 },
             "cross_ns": { name: "НС/ НС Миллионер", price: 0 }
         };
 
@@ -818,30 +1068,59 @@
             mainProducts: JSON.parse(JSON.stringify(defaultMainProducts)),
             crossProducts: JSON.parse(JSON.stringify(defaultCrossProducts)),
             meetings: [],
-            manualCrossAdjustments: {}
+            schedule: {},
+            dayPlanTargets: []
         };
 
         let isCurrentSuccess = true;
+        let currentCalendarDate = new Date();
+        let selectedDayKey = null;
 
         function loadState() {
-            const saved = localStorage.getItem('alfacalc_state_v5');
+            const saved = localStorage.getItem('alfacalc_state_v10');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
                     if (parsed.mainProducts) state.mainProducts = parsed.mainProducts;
-                    if (parsed.crossProducts) state.crossProducts = parsed.crossProducts;
                     if (parsed.meetings) state.meetings = parsed.meetings;
-                    if (parsed.manualCrossAdjustments) state.manualCrossAdjustments = parsed.manualCrossAdjustments;
+                    if (parsed.schedule) state.schedule = parsed.schedule;
+                    if (parsed.dayPlanTargets) state.dayPlanTargets = parsed.dayPlanTargets;
+                    
+                    if (parsed.crossProducts) {
+                        state.crossProducts = JSON.parse(JSON.stringify(defaultCrossProducts));
+                        for (let k in parsed.crossProducts) {
+                            if (state.crossProducts[k]) {
+                                state.crossProducts[k].price = parsed.crossProducts[k].price;
+                            }
+                        }
+                    }
                 } catch (e) {
                     console.error("Ошибка загрузки данных", e);
                 }
+            } else {
+                state.crossProducts = JSON.parse(JSON.stringify(defaultCrossProducts));
             }
             renderAll();
+            renderCalendar();
+            renderDayPlan();
         }
 
         function saveState() {
-            localStorage.setItem('alfacalc_state_v5', JSON.stringify(state));
+            localStorage.setItem('alfacalc_state_v10', JSON.stringify(state));
             renderAll();
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tab-calc').style.display = tab === 'calc' ? 'block' : 'none';
+            document.getElementById('tab-day-plan').style.display = tab === 'day-plan' ? 'block' : 'none';
+            document.getElementById('tab-schedule').style.display = tab === 'schedule' ? 'block' : 'none';
+            
+            document.getElementById('nav-calc').classList.toggle('active', tab === 'calc');
+            document.getElementById('nav-day-plan').classList.toggle('active', tab === 'day-plan');
+            document.getElementById('nav-schedule').classList.toggle('active', tab === 'schedule');
+            
+            if (tab === 'schedule') renderCalendar();
+            if (tab === 'day-plan') renderDayPlan();
         }
 
         function renderAll() {
@@ -855,10 +1134,6 @@
 
             let totalProfit = 0;
             let potentialProfit = 0;
-
-            for (let k in state.mainProducts) {
-                potentialProfit += state.mainProducts[k].assigned * state.mainProducts[k].price;
-            }
 
             state.meetings.forEach(m => {
                 if (m.isSuccess) {
@@ -878,27 +1153,21 @@
                 }
             });
 
-            for (let k in state.crossProducts) {
-                const adj = state.manualCrossAdjustments[k] || 0;
-                currentCrossCounts[k] += adj;
-                totalProfit += adj * state.crossProducts[k].price;
-            }
-
             for (let k in state.mainProducts) {
                 if (currentIssued[k] > state.mainProducts[k].assigned) {
                     state.mainProducts[k].assigned = currentIssued[k];
-                    potentialProfit += (state.mainProducts[k].assigned - currentIssued[k] + 1) * state.mainProducts[k].price;
                 }
+                potentialProfit += state.mainProducts[k].assigned * state.mainProducts[k].price;
             }
 
             document.getElementById('today-profit').innerText = totalProfit + " ₽";
             document.getElementById('potential-profit').innerText = potentialProfit + " ₽";
 
             const planContainer = document.getElementById('plan-container');
-            planContainer.innerHTML = '';
+            let planHtml = '';
             for (let key in state.mainProducts) {
                 const p = state.mainProducts[key];
-                planContainer.innerHTML += `
+                planHtml += `
                     <div class="plan-item">
                         <span class="plan-name">${p.name}</span>
                         <div class="counter-controls">
@@ -908,6 +1177,7 @@
                         </div>
                     </div>`;
             }
+            planContainer.innerHTML = planHtml;
 
             renderSelects();
             renderCrossCheckboxes();
@@ -941,52 +1211,225 @@
             const now = new Date();
             const dateStr = `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}.${now.getFullYear()}`;
             
-            let report = `Итоговый отчет за ${dateStr}
-
-Основные продукты
-`;
+            let report = `Итоговый отчет за ${dateStr}\n\nОсновные продукты\n`;
             for (let key in state.mainProducts) {
-                report += `${state.mainProducts[key].name} назначено/выдано: ${state.mainProducts[key].assigned}/${currentIssued[key] || 0}
-`;
+                report += `${state.mainProducts[key].name} назначено/выдано: ${state.mainProducts[key].assigned}/${currentIssued[key] || 0}\n`;
             }
 
-            report += `
-Статусы встреч
-`;
+            report += `\nСтатусы встреч\n`;
             for (let status in currentFailStatuses) {
-                report += `${status}: ${currentFailStatuses[status]}
-`;
+                report += `${status}: ${currentFailStatuses[status]}\n`;
             }
 
-            report += `
-Кросс-продажи
-`;
+            report += `\nКросс-продажи\n`;
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
                 if (cp.isTextOnly) continue;
                 
                 if (key === 'cross_combo' && state.crossProducts['cross_combo']) {
-                    report += `Кросс КК: ${(currentCrossCounts['cross_kk'] || 0) + (currentCrossCounts['cross_combo'] || 0)}
-`;
+                    report += `Кросс КК: ${(currentCrossCounts['cross_kk'] || 0) + (currentCrossCounts['cross_combo'] || 0)}\n`;
                 } else if (key === 'cross_kk') {
-                    // Пропуск
+                    // Пропускаем дубль
                 } else {
-                    report += `${cp.name}: ${currentCrossCounts[key] || 0}
-`;
+                    report += `${cp.name}: ${currentCrossCounts[key] || 0}\n`;
                 }
             }
 
-            report += `
-Установка приложения
-`;
-            report += `Андроид: ${currentApps.android}
-`;
-            report += `iOS: ${currentApps.ios}
-`;
-            report += `X5 (пятерочка): ${currentApps.x5}
-`;
+            report += `\nУстановка приложения\n`;
+            report += `Андроид: ${currentApps.android}\n`;
+            report += `iOS: ${currentApps.ios}\n`;
+            report += `X5 (пятерочка): ${currentApps.x5}\n`;
 
             document.getElementById('day-report-preview').innerText = report;
+        }
+
+        /* ЛОГИКА ДЛЯ ВКЛАДКИ «ПЛАН НА ДЕНЬ» */
+        function addDayPlanTarget() {
+            const nameInput = document.getElementById('target-prod-name');
+            const goalInput = document.getElementById('target-prod-goal');
+            
+            const name = nameInput.value.trim();
+            const goal = parseInt(goalInput.value) || 0;
+
+            if (!name || goal <= 0) {
+                alert("Укажите название продукта и цель продажи (больше 0)!");
+                return;
+            }
+
+            state.dayPlanTargets.push({
+                id: 'target_' + Date.now(),
+                name: name,
+                goal: goal,
+                sold: 0
+            });
+
+            nameInput.value = '';
+            goalInput.value = '';
+
+            saveState();
+            renderDayPlan();
+            showToast("Задача добавлена в план!");
+        }
+
+        function changeTargetSold(id, delta) {
+            const target = state.dayPlanTargets.find(t => t.id === id);
+            if (target) {
+                target.sold = Math.max(0, target.sold + delta);
+                saveState();
+                renderDayPlan();
+            }
+        }
+
+        function deleteDayPlanTarget(id) {
+            state.dayPlanTargets = state.dayPlanTargets.filter(t => t.id !== id);
+            saveState();
+            renderDayPlan();
+        }
+
+        function clearDayPlanTargets() {
+            if (confirm("Очистить все задачи из плана на день?")) {
+                state.dayPlanTargets = [];
+                saveState();
+                renderDayPlan();
+                showToast("План очищен!");
+            }
+        }
+
+        function renderDayPlan() {
+            const listContainer = document.getElementById('day-plan-list');
+            listContainer.innerHTML = '';
+
+            if (state.dayPlanTargets.length === 0) {
+                listContainer.innerHTML = '<div class="empty-history">Список задач пуст. Добавьте первую цель выше!</div>';
+                document.getElementById('plan-report-preview').innerText = "План на день пуст.";
+                return;
+            }
+
+            let reportText = "План на день:\n\n";
+
+            state.dayPlanTargets.forEach((t, idx) => {
+                const item = document.createElement('div');
+                item.className = 'plan-target-item';
+                item.innerHTML = `
+                    <div class="plan-target-info">
+                        <span class="plan-target-title">${t.name}</span>
+                        <span class="plan-target-sub">${t.sold}/${t.goal}</span>
+                    </div>
+                    <div class="counter-controls">
+                        <button class="btn-counter" onclick="changeTargetSold('${t.id}', -1)">-</button>
+                        <span class="counter-value">${t.sold}</span>
+                        <button class="btn-counter" onclick="changeTargetSold('${t.id}', 1)">+</button>
+                        <button class="btn-remove-prod" style="margin-left:4px;" onclick="deleteDayPlanTarget('${t.id}')">🗑️</button>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+
+                reportText += `${idx + 1}. ${t.name} - ${t.sold}/${t.goal}\n`;
+            });
+
+            document.getElementById('plan-report-preview').innerText = reportText;
+        }
+
+        function copyPlanReport() {
+            copyToClipboard(document.getElementById('plan-report-preview').innerText);
+            showToast("Отчет План на день скопирован!");
+        }
+
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            
+            const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+            document.getElementById('calendar-title').innerText = `${monthNames[month]} ${year}`;
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            let startingDay = firstDay.getDay() - 1;
+            if (startingDay === -1) startingDay = 6;
+
+            const totalDays = lastDay.getDate();
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < startingDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            const today = new Date();
+            let totalWork = 0;
+            let tripWork = 0;
+            let passedWork = 0;
+            let leftWork = 0;
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayDate = new Date(year, month, day);
+                const dayKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const status = state.schedule[dayKey];
+
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+                
+                if (dayDate.toDateString() === today.toDateString()) {
+                    cell.classList.add('today');
+                }
+
+                if (status === 'work') {
+                    cell.classList.add('work');
+                    cell.innerHTML = `${day}<span class="day-icon">💼</span>`;
+                    totalWork++;
+                    if (dayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) passedWork++;
+                    else leftWork++;
+                } else if (status === 'trip') {
+                    cell.classList.add('trip');
+                    cell.innerHTML = `${day}<span class="day-icon">🚘</span>`;
+                    totalWork++;
+                    tripWork++;
+                    if (dayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) passedWork++;
+                    else leftWork++;
+                } else if (status === 'off') {
+                    cell.classList.add('off');
+                    cell.innerHTML = `${day}<span class="day-icon">🏖️</span>`;
+                } else {
+                    cell.innerText = day;
+                }
+
+                cell.onclick = () => openDayModal(dayKey, day, monthNames[month]);
+                grid.appendChild(cell);
+            }
+
+            document.getElementById('stat-total-work').innerText = totalWork;
+            document.getElementById('stat-trip-work').innerText = tripWork;
+            document.getElementById('stat-passed-work').innerText = passedWork;
+            document.getElementById('stat-left-work').innerText = leftWork;
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        function openDayModal(dayKey, dayNum, monthName) {
+            selectedDayKey = dayKey;
+            document.getElementById('day-modal-title').innerText = `${dayNum} ${monthName}`;
+            document.getElementById('day-modal').style.display = 'block';
+        }
+
+        function closeDayModal() {
+            document.getElementById('day-modal').style.display = 'none';
+            selectedDayKey = null;
+        }
+
+        function setDayStatus(status) {
+            if (!selectedDayKey) return;
+            if (status === 'none') {
+                delete state.schedule[selectedDayKey];
+            } else {
+                state.schedule[selectedDayKey] = status;
+            }
+            saveState();
+            renderCalendar();
+            closeDayModal();
         }
 
         function changeAssigned(key, val) {
@@ -1153,7 +1596,6 @@
                 if (type === 'main') delete state.mainProducts[key];
                 else {
                     delete state.crossProducts[key];
-                    delete state.manualCrossAdjustments[key];
                 }
                 saveState();
                 openSettings();
@@ -1166,6 +1608,16 @@
         }
 
         function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("Скопировано!");
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
             const ta = document.createElement('textarea');
             ta.value = text;
             document.body.appendChild(ta);
@@ -1183,11 +1635,11 @@
 
         function openSettings() {
             const listContainer = document.getElementById('prices-settings-list');
-            listContainer.innerHTML = '<h3 style="font-size:14px; margin-bottom:10px; color:var(--alfa-black);">Основные продукты:</h3>';
+            let html = '<h3 style="font-size:14px; margin-bottom:10px; color:var(--alfa-black);">Основные продукты:</h3>';
             
             for (let key in state.mainProducts) {
                 const p = state.mainProducts[key];
-                listContainer.innerHTML += `
+                html += `
                     <div class="setting-row">
                         <label>${p.name}</label>
                         <div class="price-input-wrapper">
@@ -1198,10 +1650,10 @@
                     </div>`;
             }
 
-            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:20px; margin-bottom:10px; color:var(--alfa-black);">Кросс-продажи:</h3>';
+            html += '<h3 style="font-size:14px; margin-top:20px; margin-bottom:10px; color:var(--alfa-black);">Кросс-продажи:</h3>';
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
-                listContainer.innerHTML += `
+                html += `
                     <div class="setting-row">
                         <label>${cp.name}</label>
                         <div class="price-input-wrapper">
@@ -1212,21 +1664,7 @@
                     </div>`;
             }
 
-            listContainer.innerHTML += '<h3 style="font-size:14px; margin-top:20px; margin-bottom:5px; color:var(--alfa-red);">Прямая докрутка счетчиков за день (ШТ):</h3>';
-            for (let key in state.crossProducts) {
-                const cp = state.crossProducts[key];
-                const currentVal = state.manualCrossAdjustments[key] || 0;
-                listContainer.innerHTML += `
-                    <div class="setting-row">
-                        <label style="color:#555;">${cp.name}</label>
-                        <div class="price-input-wrapper">
-                            <input type="number" id="count-cross-${key}" value="${currentVal}">
-                            <span class="currency-sign" style="visibility:hidden;">₽</span>
-                        </div>
-                        <div style="width:28px;"></div> <!-- распорка вместо урны -->
-                    </div>`;
-            }
-
+            listContainer.innerHTML = html;
             document.getElementById('settings-modal').style.display = 'block';
         }
 
@@ -1238,25 +1676,23 @@
             for (let key in state.crossProducts) {
                 const inputPrice = document.getElementById(`set-cross-${key}`);
                 if (inputPrice) state.crossProducts[key].price = parseInt(inputPrice.value) || 0;
-                
-                const inputCount = document.getElementById(`count-cross-${key}`);
-                if (inputCount) state.manualCrossAdjustments[key] = parseInt(inputCount.value) || 0;
             }
             document.getElementById('settings-modal').style.display = 'none';
             saveState();
         }
 
         function confirmReset() {
-            if (confirm("Сбросить результаты дня? Все проведенные встречи, заработанные деньги и ручные докрутки обнулятся. Ваши добавленные продукты и настроенные цены ОСТАНУТСЯ.")) {
+            if (confirm("Сбросить результаты дня? Проведенные встречи в калькуляторе и счетчики плана на день обнулятся. Ваши добавленные продукты, настройки цен И ГРАФИК РАБОТЫ ОСТАНУТСЯ.")) {
                 state.meetings = []; 
-                state.manualCrossAdjustments = {}; 
+                state.dayPlanTargets.forEach(t => t.sold = 0);
                 
                 for (let key in state.mainProducts) {
                     state.mainProducts[key].assigned = 0;
                 }
                 
                 saveState();
-                showToast("День обнулен. Цены сохранены!");
+                renderDayPlan();
+                showToast("Результаты дня обнулены!");
             }
         }
 
