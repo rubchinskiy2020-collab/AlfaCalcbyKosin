@@ -137,6 +137,7 @@
             text-align: center;
             padding: 16px;
             margin-bottom: 8px;
+            position: relative;
         }
         
         .profit-box .label {
@@ -151,6 +152,24 @@
             font-size: 28px;
             font-weight: 800;
             margin-top: 2px;
+        }
+
+        .btn-extra-income {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+            display: inline-block;
+        }
+
+        .btn-extra-income:active {
+            background: rgba(255, 255, 255, 0.35);
         }
 
         .potential-box {
@@ -733,7 +752,6 @@
             gap: 8px;
         }
 
-        /* СТИЛИ ДЛЯ ВКЛАДКИ «ПЛАН НА ДЕНЬ» */
         .plan-target-item {
             background: var(--alfa-bg);
             border: 1px solid var(--alfa-border);
@@ -810,6 +828,7 @@
         <div class="card profit-box">
             <div class="label">Заработано за сегодня</div>
             <div class="amount" id="today-profit">0 ₽</div>
+            <button class="btn-extra-income" onclick="setExtraIncome()">➕ Доп. доход: <span id="extra-income-label">0 ₽</span></button>
         </div>
 
         <div class="potential-box">
@@ -1069,7 +1088,8 @@
             crossProducts: JSON.parse(JSON.stringify(defaultCrossProducts)),
             meetings: [],
             schedule: {},
-            dayPlanTargets: []
+            dayPlanTargets: [],
+            extraIncome: 0
         };
 
         let isCurrentSuccess = true;
@@ -1077,7 +1097,7 @@
         let selectedDayKey = null;
 
         function loadState() {
-            const saved = localStorage.getItem('alfacalc_state_v10');
+            const saved = localStorage.getItem('alfacalc_state_v11');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -1085,6 +1105,7 @@
                     if (parsed.meetings) state.meetings = parsed.meetings;
                     if (parsed.schedule) state.schedule = parsed.schedule;
                     if (parsed.dayPlanTargets) state.dayPlanTargets = parsed.dayPlanTargets;
+                    if (parsed.extraIncome !== undefined) state.extraIncome = parsed.extraIncome;
                     
                     if (parsed.crossProducts) {
                         state.crossProducts = JSON.parse(JSON.stringify(defaultCrossProducts));
@@ -1106,8 +1127,19 @@
         }
 
         function saveState() {
-            localStorage.setItem('alfacalc_state_v10', JSON.stringify(state));
+            localStorage.setItem('alfacalc_state_v11', JSON.stringify(state));
             renderAll();
+        }
+
+        function setExtraIncome() {
+            const current = state.extraIncome || 0;
+            const input = prompt("Укажите дополнительный доход за сегодня (₽):", current);
+            if (input !== null) {
+                const val = parseInt(input) || 0;
+                state.extraIncome = Math.max(0, val);
+                saveState();
+                showToast("Доп. доход обновлен!");
+            }
         }
 
         function switchTab(tab) {
@@ -1132,7 +1164,7 @@
             for (let k in state.mainProducts) currentIssued[k] = 0;
             for (let k in state.crossProducts) currentCrossCounts[k] = 0;
 
-            let totalProfit = 0;
+            let totalProfit = state.extraIncome || 0;
             let potentialProfit = 0;
 
             state.meetings.forEach(m => {
@@ -1161,6 +1193,7 @@
             }
 
             document.getElementById('today-profit').innerText = totalProfit + " ₽";
+            document.getElementById('extra-income-label').innerText = (state.extraIncome || 0) + " ₽";
             document.getElementById('potential-profit').innerText = potentialProfit + " ₽";
 
             const planContainer = document.getElementById('plan-container');
@@ -1239,6 +1272,10 @@
             report += `Андроид: ${currentApps.android}\n`;
             report += `iOS: ${currentApps.ios}\n`;
             report += `X5 (пятерочка): ${currentApps.x5}\n`;
+
+            if (state.extraIncome > 0) {
+                report += `\nДополнительный доход: ${state.extraIncome} ₽\n`;
+            }
 
             document.getElementById('day-report-preview').innerText = report;
         }
@@ -1682,8 +1719,9 @@
         }
 
         function confirmReset() {
-            if (confirm("Сбросить результаты дня? Проведенные встречи в калькуляторе и счетчики плана на день обнулятся. Ваши добавленные продукты, настройки цен И ГРАФИК РАБОТЫ ОСТАНУТСЯ.")) {
+            if (confirm("Сбросить результаты дня? Проведенные встречи, доп. доход и счетчики плана на день обнулятся. Ваши добавленные продукты, настройки цен И ГРАФИК РАБОТЫ ОСТАНУТСЯ.")) {
                 state.meetings = []; 
+                state.extraIncome = 0;
                 state.dayPlanTargets.forEach(t => t.sold = 0);
                 
                 for (let key in state.mainProducts) {
