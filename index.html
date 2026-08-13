@@ -1062,14 +1062,14 @@
         };
 
         const defaultCrossProducts = {
-            "cross_act": { name: "Активация", price: 0, isTextOnly: true },
-            "cross_tx1": { name: "Транзакция", price: 0, isTextOnly: true },
+            "cross_act": { name: "Активация", price: 0 },
+            "cross_tx1": { name: "Транзакция", price: 0 },
             "cross_smart": { name: "Смарт", price: 0 },
             "cross_ins": { name: "Коробочное страхование", price: 0 },
             "cross_combo": { name: "Комбо", price: 0 },
-            "cross_kids_c": { name: "Детская карта", price: 0, isTextOnly: true },
-            "cross_bs": { name: "Бс", price: 0, isTextOnly: true },
-            "cross_bs_t": { name: "Пополнение Бс", price: 0, isTextOnly: true },
+            "cross_kids_c": { name: "Детская карта", price: 0 },
+            "cross_bs": { name: "Бс", price: 0 },
+            "cross_bs_t": { name: "Пополнение Бс", price: 0 },
             "cross_pens": { name: "Пенсия", price: 0 },
             "cross_kk": { name: "Кросс КК", price: 0 },
             "cross_dk": { name: "Кросс ДК", price: 0 },
@@ -1097,7 +1097,7 @@
         let selectedDayKey = null;
 
         function loadState() {
-            const saved = localStorage.getItem('alfacalc_state_v11');
+            const saved = localStorage.getItem('alfacalc_state_v12');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -1127,7 +1127,7 @@
         }
 
         function saveState() {
-            localStorage.setItem('alfacalc_state_v11', JSON.stringify(state));
+            localStorage.setItem('alfacalc_state_v12', JSON.stringify(state));
             renderAll();
         }
 
@@ -1257,15 +1257,7 @@
             report += `\nКросс-продажи\n`;
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
-                if (cp.isTextOnly) continue;
-                
-                if (key === 'cross_combo' && state.crossProducts['cross_combo']) {
-                    report += `Кросс КК: ${(currentCrossCounts['cross_kk'] || 0) + (currentCrossCounts['cross_combo'] || 0)}\n`;
-                } else if (key === 'cross_kk') {
-                    // Пропускаем дубль
-                } else {
-                    report += `${cp.name}: ${currentCrossCounts[key] || 0}\n`;
-                }
+                report += `${cp.name}: ${currentCrossCounts[key] || 0}\n`;
             }
 
             report += `\nУстановка приложения\n`;
