@@ -783,6 +783,7 @@
             font-weight: 600;
         }
 
+        /* ВСПОМОГАТЕЛЬНОЕ УВЕДОМЛЕНИЕ (TOAST) */
         .toast {
             position: fixed;
             bottom: 85px;
@@ -796,7 +797,8 @@
             font-weight: 600;
             text-align: center;
             white-space: nowrap;
-            transition: transform 0.25s ease-out;
+            opacity: 0;
+            transition: transform 0.25s ease-out, opacity 0.25s ease-out;
             z-index: 300;
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
             pointer-events: none;
@@ -804,6 +806,7 @@
 
         .toast.show {
             transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
@@ -1095,6 +1098,7 @@
         let isCurrentSuccess = true;
         let currentCalendarDate = new Date();
         let selectedDayKey = null;
+        let toastTimeout = null;
 
         function loadState() {
             const saved = localStorage.getItem('alfacalc_state_v12');
@@ -1659,7 +1663,14 @@
             const toast = document.getElementById('toast-msg');
             toast.innerText = msg;
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 2000);
+            
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+            
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 1500);
         }
 
         function openSettings() {
