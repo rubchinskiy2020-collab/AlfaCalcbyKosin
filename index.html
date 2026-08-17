@@ -39,6 +39,7 @@
             padding-bottom: 75px;
             font-size: 15px;
             line-height: 1.4;
+            overflow-x: hidden;
         }
 
         header {
@@ -478,6 +479,7 @@
             padding: 15px 0;
         }
 
+        /* МОДАЛЬНОЕ ОКНО */
         .modal {
             display: none;
             position: fixed;
@@ -487,54 +489,66 @@
             height: 100%;
             background: rgba(11, 15, 20, 0.5);
             z-index: 200;
-            padding: 16px;
+            padding: 10px;
             overflow-y: auto;
         }
 
         .modal-content {
             background: var(--alfa-card);
             border-radius: 20px;
-            padding: 20px;
-            max-width: 550px;
+            padding: 16px 12px;
+            max-width: 500px;
             margin: 10px auto;
+            box-sizing: border-box;
         }
 
         .setting-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: var(--alfa-bg);
-            padding: 8px 12px;
-            border-radius: 12px;
-            gap: 10px;
+            padding: 6px 8px;
+            border-radius: 10px;
+            gap: 6px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .setting-row label {
-            font-size: 14px;
+        .setting-name-input {
+            flex: 1 1 auto;
+            min-width: 0;
+            height: 34px;
+            padding: 0 8px;
+            border: 1px solid var(--alfa-border);
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--alfa-text);
-            flex: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            background: var(--alfa-card);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .setting-name-input:focus {
+            border-color: var(--alfa-red);
         }
 
         .setting-row .price-input-wrapper {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 2px;
             flex-shrink: 0;
         }
 
-        .setting-row input {
-            width: 80px;
-            height: 36px;
-            padding: 0 8px;
+        .setting-price-input {
+            width: 58px;
+            height: 34px;
+            padding: 0 4px;
             border: 1px solid var(--alfa-border);
             border-radius: 8px;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             background: var(--alfa-card);
             color: var(--alfa-black);
@@ -543,24 +557,24 @@
             flex-shrink: 0;
         }
 
-        .setting-row input:focus {
+        .setting-price-input:focus {
             border-color: var(--alfa-red);
         }
 
         .setting-row .currency-sign {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--alfa-muted);
-            width: 12px;
+            width: 8px;
         }
 
         .btn-remove-prod {
             background: transparent;
             border: none;
             color: var(--alfa-red);
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
-            padding: 6px;
+            padding: 4px;
             border-radius: 6px;
             display: flex;
             align-items: center;
@@ -576,15 +590,15 @@
             background: var(--alfa-bg);
             border: 1px dashed var(--alfa-border);
             border-radius: 12px;
-            padding: 12px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            padding: 10px;
+            margin-top: 12px;
+            margin-bottom: 12px;
         }
 
         .add-product-form h4 {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--alfa-black);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
@@ -592,7 +606,7 @@
         .add-inline-group {
             display: flex;
             gap: 6px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .add-inline-group input, .add-inline-group select {
@@ -601,6 +615,7 @@
             border-radius: 8px;
             border: 1px solid var(--alfa-border);
             background: white;
+            min-width: 0;
         }
 
         .bottom-nav {
@@ -639,6 +654,7 @@
             color: var(--alfa-red);
         }
 
+        /* КАЛЕНДАРЬ И ГРАФИК */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -656,7 +672,7 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 6px;
+            gap: 4px;
             text-align: center;
         }
 
@@ -669,13 +685,14 @@
 
         .day-cell {
             background: var(--alfa-bg);
-            border-radius: 10px;
-            aspect-ratio: 1;
+            border-radius: 8px;
+            min-height: 52px;
+            padding: 4px 2px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            font-size: 13px;
+            justify-content: flex-start;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             position: relative;
@@ -687,39 +704,47 @@
             border-color: var(--alfa-black);
         }
 
-        .day-cell.work {
-            background: var(--alfa-red);
-            color: white;
-        }
-
-        .day-cell.trip {
-            background: var(--alfa-purple);
-            color: white;
-        }
-
-        .day-cell.off {
-            background: #E2E5EB;
-            color: var(--alfa-muted);
-        }
-
         .day-cell .day-icon {
-            font-size: 10px;
+            font-size: 9px;
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        .day-cell .day-profit-tag {
+            font-size: 8px;
+            font-weight: 800;
+            line-height: 1;
             margin-top: 2px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 2px 3px;
+            border-radius: 4px;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .day-cell.has-custom-bg .day-profit-tag {
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+
+        .day-cell:not(.has-custom-bg) .day-profit-tag {
+            background: #dcdfe6;
+            color: var(--alfa-black);
         }
 
         .calendar-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
             background: var(--alfa-bg);
             padding: 12px;
             border-radius: 12px;
-            margin-top: 14px;
+            margin-top: 12px;
             text-align: center;
         }
 
         .stat-item .stat-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--alfa-black);
         }
@@ -731,25 +756,28 @@
             margin-top: 2px;
         }
 
-        .day-actions {
-            display: flex;
-            flex-direction: column;
+        .day-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
-            margin-top: 12px;
+            margin-top: 8px;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
         .btn-day-status {
             width: 100%;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px 6px;
+            border-radius: 8px;
             border: none;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 4px;
+            text-align: center;
         }
 
         .plan-target-item {
@@ -928,8 +956,17 @@
         </div>
     </div>
 
-    <!-- ВКЛАДКА 3: ГРАФИК РАБОТЫ -->
+    <!-- ВКЛАДКА 3: ГРАФИК РАБОТЫ И ДОХОД -->
     <div id="tab-schedule" class="container" style="display: none;">
+        
+        <div class="card profit-box" style="background: linear-gradient(135deg, #1B2028 0%, #2F3642 100%);">
+            <div class="label">Заработано в этом месяце</div>
+            <div class="amount" id="month-fact-profit">0 ₽</div>
+            <div style="margin-top: 8px; font-size: 13px; opacity: 0.9;">
+                Прогноз за месяц: <b id="month-forecast-profit" style="color: var(--alfa-green);">0 ₽</b>
+            </div>
+        </div>
+
         <div class="card">
             <div class="calendar-header">
                 <button class="btn-icon" onclick="changeMonth(-1)">◀</button>
@@ -956,7 +993,7 @@
                 </div>
                 <div class="stat-item">
                     <div class="stat-value" style="color:var(--alfa-purple);" id="stat-trip-work">0</div>
-                    <div class="stat-label">Из них выездов 🚘</div>
+                    <div class="stat-label">Выездов 🚘</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-value" id="stat-passed-work">0</div>
@@ -965,6 +1002,10 @@
                 <div class="stat-item">
                     <div class="stat-value" style="color:var(--alfa-red);" id="stat-left-work">0</div>
                     <div class="stat-label">Осталось смен</div>
+                </div>
+                <div class="stat-item" style="grid-column: span 2;">
+                    <div class="stat-value" style="color:var(--alfa-green);" id="stat-avg-work">0 ₽</div>
+                    <div class="stat-label">Средний доход за смену</div>
                 </div>
             </div>
         </div>
@@ -990,13 +1031,18 @@
     <div class="modal" id="day-modal">
         <div class="modal-content" style="max-width: 380px;">
             <div class="card-title" id="day-modal-title">Настройка дня</div>
-            <p style="font-size:13px; color:var(--alfa-muted); margin-bottom:15px;">Выберите тип дня:</p>
-            <div class="day-actions">
-                <button class="btn-day-status" style="background:var(--alfa-red); color:white;" onclick="setDayStatus('work')">💼 Рабочий (Офис/Город)</button>
-                <button class="btn-day-status" style="background:var(--alfa-purple); color:white;" onclick="setDayStatus('trip')">🚘 Выезд в НП</button>
-                <button class="btn-day-status" style="background:#E2E5EB; color:var(--alfa-black);" onclick="setDayStatus('off')">🏖️ Выходной</button>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="font-size:12px; font-weight:700; color:var(--alfa-black);">Заработок за день (₽):</label>
+                <input type="number" id="day-profit-input" class="input-text" style="margin-top:4px;" placeholder="0">
             </div>
-            <button class="btn-primary" style="margin-top:12px; background:var(--alfa-black);" onclick="setDayStatus('none')">Очистить статус</button>
+
+            <p style="font-size:13px; color:var(--alfa-muted); margin-bottom:6px;">Выберите статус/категорию:</p>
+            <div class="day-actions-grid" id="day-categories-modal-grid">
+                <!-- Категории генерируются динамически -->
+            </div>
+
+            <button class="btn-primary" style="margin-top:12px; background:var(--alfa-black);" onclick="saveDayDetails('none')">Очистить день</button>
             <button class="btn-delete" style="width:100%; margin-top:8px;" onclick="closeDayModal()">Отмена</button>
         </div>
     </div>
@@ -1009,8 +1055,8 @@
             <div class="add-product-form">
                 <h4>➕ Добавить новый элемент</h4>
                 <div class="add-inline-group">
-                    <input type="text" id="new-item-name" placeholder="Название (продукта, приложения или статуса)" style="flex: 2;">
-                    <input type="number" id="new-item-price" placeholder="Цена (₽)" style="flex: 1;">
+                    <input type="text" id="new-item-name" placeholder="Название позиции" style="flex: 2;">
+                    <input type="number" id="new-item-price" placeholder="Цена / Бонус (₽)" style="flex: 1;">
                 </div>
                 <div class="add-inline-group">
                     <select id="new-item-type" style="flex: 1.5;">
@@ -1018,12 +1064,14 @@
                         <option value="cross">Кросс-продажа</option>
                         <option value="app">Приложение</option>
                         <option value="fail">Статус неуспешной</option>
+                        <option value="shift_cat">Категория смены (график)</option>
                     </select>
+                    <input type="text" id="new-item-icon" placeholder="Иконка (напр: 🏖️)" style="width:70px; display:none;">
                     <button class="btn-primary" style="padding: 8px; width: auto; border-radius: 8px; font-size:13px; flex: 0.5;" onclick="addNewCustomItem()">ОК</button>
                 </div>
             </div>
 
-            <div style="max-height: 360px; overflow-y: auto; margin-bottom: 20px;" id="prices-settings-list"></div>
+            <div style="max-height: 360px; overflow-y: auto; margin-bottom: 16px;" id="prices-settings-list"></div>
             <button class="btn-primary" onclick="closeSettings()">Сохранить и закрыть</button>
         </div>
     </div>
@@ -1066,29 +1114,38 @@
         };
 
         const defaultAppOptions = {
-            "app_android": { name: "Андроид" },
-            "app_ios": { name: "iOS" },
-            "app_x5": { name: "X5 (Пятерочка)" }
+            "app_android": { name: "Андроид", price: 0 },
+            "app_ios": { name: "iOS", price: 0 },
+            "app_x5": { name: "X5 (Пятерочка)", price: 0 }
         };
 
-        const defaultFailStatuses = [
-            "НДЗ",
-            "Перенос встречи",
-            "Отказ банка/911",
-            "Отказ банка до встречи",
-            "Отказ клиента до встречи",
-            "Отказ клиента на встрече",
-            "Отмена встречи",
-            "Дубль"
-        ];
+        const defaultFailStatuses = {
+            "fail_ndz": { name: "НДЗ", price: 0 },
+            "fail_resched": { name: "Перенос встречи", price: 0 },
+            "fail_bank911": { name: "Отказ банка/911", price: 0 },
+            "fail_bank_before": { name: "Отказ банка до встречи", price: 0 },
+            "fail_cl_before": { name: "Отказ клиента до встречи", price: 0 },
+            "fail_cl_meet": { name: "Отказ клиента на встрече", price: 0 },
+            "fail_cancel": { name: "Отмена встречи", price: 0 },
+            "fail_double": { name: "Дубль", price: 0 }
+        };
+
+        const defaultShiftCategories = {
+            "work": { name: "Рабочий (Офис/Город)", icon: "💼", color: "var(--alfa-red)", isWork: true },
+            "trip": { name: "Выезд в НП", icon: "🚘", color: "var(--alfa-purple)", isWork: true, isTrip: true },
+            "off": { name: "Выходной", icon: "🏖️", color: "#E2E5EB", isWork: false },
+            "vacation": { name: "Отпуск", icon: "🌴", color: "#F39C12", isWork: false },
+            "other_job": { name: "Другая работа", icon: "🛠️", color: "#34495E", isWork: false }
+        };
 
         let state = {
             mainProducts: JSON.parse(JSON.stringify(defaultMainProducts)),
             crossProducts: JSON.parse(JSON.stringify(defaultCrossProducts)),
             appOptions: JSON.parse(JSON.stringify(defaultAppOptions)),
             failStatuses: JSON.parse(JSON.stringify(defaultFailStatuses)),
+            shiftCategories: JSON.parse(JSON.stringify(defaultShiftCategories)),
             meetings: [],
-            schedule: {},
+            schedule: {}, // { "YYYY-MM-DD": { type: "work" | "trip" | ..., profit: 1200 } }
             dayPlanTargets: [],
             extraIncome: 0
         };
@@ -1097,9 +1154,14 @@
         let currentCalendarDate = new Date();
         let selectedDayKey = null;
         let toastTimeout = null;
+        let currentCalculatedTodayProfit = 0;
+
+        document.getElementById('new-item-type').addEventListener('change', function(e) {
+            document.getElementById('new-item-icon').style.display = e.target.value === 'shift_cat' ? 'block' : 'none';
+        });
 
         function loadState() {
-            const saved = localStorage.getItem('alfacalc_state_v14');
+            const saved = localStorage.getItem('alfacalc_state_v18');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -1107,8 +1169,18 @@
                     if (parsed.crossProducts) state.crossProducts = parsed.crossProducts;
                     if (parsed.appOptions) state.appOptions = parsed.appOptions;
                     if (parsed.failStatuses) state.failStatuses = parsed.failStatuses;
+                    if (parsed.shiftCategories) state.shiftCategories = parsed.shiftCategories;
                     if (parsed.meetings) state.meetings = parsed.meetings;
-                    if (parsed.schedule) state.schedule = parsed.schedule;
+                    
+                    if (parsed.schedule) {
+                        for (let k in parsed.schedule) {
+                            if (typeof parsed.schedule[k] === 'string') {
+                                state.schedule[k] = { type: parsed.schedule[k], profit: 0 };
+                            } else {
+                                state.schedule[k] = parsed.schedule[k];
+                            }
+                        }
+                    }
                     if (parsed.dayPlanTargets) state.dayPlanTargets = parsed.dayPlanTargets;
                     if (parsed.extraIncome !== undefined) state.extraIncome = parsed.extraIncome;
                 } catch (e) {
@@ -1121,7 +1193,7 @@
         }
 
         function saveState() {
-            localStorage.setItem('alfacalc_state_v14', JSON.stringify(state));
+            localStorage.setItem('alfacalc_state_v18', JSON.stringify(state));
             renderAll();
         }
 
@@ -1158,7 +1230,7 @@
             for (let k in state.mainProducts) currentIssued[k] = 0;
             for (let k in state.crossProducts) currentCrossCounts[k] = 0;
             for (let k in state.appOptions) currentAppCounts[k] = 0;
-            state.failStatuses.forEach(st => currentFailCounts[st] = 0);
+            for (let k in state.failStatuses) currentFailCounts[k] = 0;
 
             let totalProfit = state.extraIncome || 0;
             let potentialProfit = 0;
@@ -1178,11 +1250,13 @@
                     if (m.appKeys) {
                         m.appKeys.forEach(ak => {
                             if (currentAppCounts[ak] !== undefined) currentAppCounts[ak]++;
+                            totalProfit += state.appOptions[ak] ? (state.appOptions[ak].price || 0) : 0;
                         });
                     }
                 } else {
-                    if (currentFailCounts[m.failStatus] !== undefined) {
-                        currentFailCounts[m.failStatus]++;
+                    if (currentFailCounts[m.failStatusKey] !== undefined) {
+                        currentFailCounts[m.failStatusKey]++;
+                        totalProfit += state.failStatuses[m.failStatusKey] ? (state.failStatuses[m.failStatusKey].price || 0) : 0;
                     }
                 }
             });
@@ -1193,6 +1267,8 @@
                 }
                 potentialProfit += state.mainProducts[k].assigned * state.mainProducts[k].price;
             }
+
+            currentCalculatedTodayProfit = totalProfit;
 
             document.getElementById('today-profit').innerText = totalProfit + " ₽";
             document.getElementById('extra-income-label').innerText = (state.extraIncome || 0) + " ₽";
@@ -1227,7 +1303,10 @@
                 [...state.meetings].reverse().forEach(m => {
                     const item = document.createElement('div');
                     item.className = 'history-item';
-                    let detailsText = m.isSuccess ? `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey}` : `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey} • Статус: ${m.failStatus}`;
+                    let detailsText = m.isSuccess 
+                        ? `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey}` 
+                        : `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey} • Статус: ${state.failStatuses[m.failStatusKey]?.name || m.failStatusKey}`;
+                    
                     if (m.isSuccess && m.crossKeys && m.crossKeys.length > 0) {
                         detailsText += ` • Кроссы: ${m.crossKeys.map(ck => state.crossProducts[ck]?.name).filter(Boolean).join(', ')}`;
                     }
@@ -1254,9 +1333,9 @@
             }
 
             report += `\nСтатусы встреч\n`;
-            state.failStatuses.forEach(st => {
-                report += `${st}: ${currentFailCounts[st] || 0}\n`;
-            });
+            for (let key in state.failStatuses) {
+                report += `${state.failStatuses[key].name}: ${currentFailCounts[key] || 0}\n`;
+            }
 
             report += `\nКросс-продажи\n`;
             for (let key in state.crossProducts) {
@@ -1269,14 +1348,9 @@
                 report += `${state.appOptions[key].name}: ${currentAppCounts[key] || 0}\n`;
             }
 
-            if (state.extraIncome > 0) {
-                report += `\nДополнительный доход: ${state.extraIncome} ₽\n`;
-            }
-
             document.getElementById('day-report-preview').innerText = report;
         }
 
-        /* ЛОГИКА ДЛЯ ВКЛАДКИ «ПЛАН НА ДЕНЬ» */
         function addDayPlanTarget() {
             const nameInput = document.getElementById('target-prod-name');
             const goalInput = document.getElementById('target-prod-goal');
@@ -1390,15 +1464,26 @@
             }
 
             const today = new Date();
+            const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
             let totalWork = 0;
             let tripWork = 0;
             let passedWork = 0;
             let leftWork = 0;
+            let totalMonthProfit = 0;
 
             for (let day = 1; day <= totalDays; day++) {
                 const dayDate = new Date(year, month, day);
                 const dayKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const status = state.schedule[dayKey];
+                const dayData = state.schedule[dayKey] || { type: 'none', profit: 0 };
+                const cat = state.shiftCategories[dayData.type];
+
+                let dayProfit = dayData.profit || 0;
+                if (dayKey === todayKey && currentCalculatedTodayProfit > 0 && dayProfit === 0) {
+                    dayProfit = currentCalculatedTodayProfit;
+                }
+
+                totalMonthProfit += dayProfit;
 
                 const cell = document.createElement('div');
                 cell.className = 'day-cell';
@@ -1407,34 +1492,44 @@
                     cell.classList.add('today');
                 }
 
-                if (status === 'work') {
-                    cell.classList.add('work');
-                    cell.innerHTML = `${day}<span class="day-icon">💼</span>`;
-                    totalWork++;
-                    if (dayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) passedWork++;
-                    else leftWork++;
-                } else if (status === 'trip') {
-                    cell.classList.add('trip');
-                    cell.innerHTML = `${day}<span class="day-icon">🚘</span>`;
-                    totalWork++;
-                    tripWork++;
-                    if (dayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) passedWork++;
-                    else leftWork++;
-                } else if (status === 'off') {
-                    cell.classList.add('off');
-                    cell.innerHTML = `${day}<span class="day-icon">🏖️</span>`;
-                } else {
-                    cell.innerText = day;
+                let iconHtml = '';
+                if (cat) {
+                    cell.classList.add('has-custom-bg');
+                    cell.style.backgroundColor = cat.color;
+                    cell.style.color = cat.color === '#E2E5EB' ? 'var(--alfa-text)' : 'white';
+                    iconHtml = `<span class="day-icon">${cat.icon || ''}</span>`;
+                    
+                    if (cat.isWork) {
+                        totalWork++;
+                        if (cat.isTrip) tripWork++;
+                        if (dayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) passedWork++;
+                        else leftWork++;
+                    }
                 }
 
+                let profitBadgeHtml = '';
+                if (dayProfit > 0) {
+                    profitBadgeHtml = `<span class="day-profit-tag">${dayProfit >= 1000 ? (dayProfit/1000).toFixed(1) + 'k' : dayProfit}</span>`;
+                }
+
+                cell.innerHTML = `<span>${day}</span>${iconHtml}${profitBadgeHtml}`;
                 cell.onclick = () => openDayModal(dayKey, day, monthNames[month]);
                 grid.appendChild(cell);
             }
+
+            const workedShiftsCount = passedWork + (state.schedule[todayKey] && state.shiftCategories[state.schedule[todayKey].type]?.isWork ? 1 : 0);
+            const avgDailyProfit = workedShiftsCount > 0 ? Math.round(totalMonthProfit / workedShiftsCount) : 0;
+            const remainingShifts = Math.max(0, totalWork - workedShiftsCount);
+            const projectedMonthProfit = totalMonthProfit + (remainingShifts * avgDailyProfit);
 
             document.getElementById('stat-total-work').innerText = totalWork;
             document.getElementById('stat-trip-work').innerText = tripWork;
             document.getElementById('stat-passed-work').innerText = passedWork;
             document.getElementById('stat-left-work').innerText = leftWork;
+            document.getElementById('stat-avg-work').innerText = avgDailyProfit.toLocaleString('ru-RU') + " ₽";
+            
+            document.getElementById('month-fact-profit').innerText = totalMonthProfit.toLocaleString('ru-RU') + " ₽";
+            document.getElementById('month-forecast-profit').innerText = (totalWork > 0 ? projectedMonthProfit.toLocaleString('ru-RU') : totalMonthProfit.toLocaleString('ru-RU')) + " ₽";
         }
 
         function changeMonth(delta) {
@@ -1444,7 +1539,25 @@
 
         function openDayModal(dayKey, dayNum, monthName) {
             selectedDayKey = dayKey;
+            const dayData = state.schedule[dayKey] || { type: 'none', profit: 0 };
+            
             document.getElementById('day-modal-title').innerText = `${dayNum} ${monthName}`;
+            document.getElementById('day-profit-input').value = dayData.profit || (dayKey === getTodayKey() ? currentCalculatedTodayProfit : '');
+            
+            const btnContainer = document.getElementById('day-categories-modal-grid');
+            btnContainer.innerHTML = '';
+
+            for (let key in state.shiftCategories) {
+                const cat = state.shiftCategories[key];
+                const btn = document.createElement('button');
+                btn.className = 'btn-day-status';
+                btn.style.background = cat.color;
+                btn.style.color = cat.color === '#E2E5EB' ? 'var(--alfa-black)' : 'white';
+                btn.innerHTML = `${cat.icon || ''} ${cat.name}`;
+                btn.onclick = () => saveDayDetails(key);
+                btnContainer.appendChild(btn);
+            }
+
             document.getElementById('day-modal').style.display = 'block';
         }
 
@@ -1453,16 +1566,26 @@
             selectedDayKey = null;
         }
 
-        function setDayStatus(status) {
+        function saveDayDetails(status) {
             if (!selectedDayKey) return;
+            const profitVal = parseInt(document.getElementById('day-profit-input').value) || 0;
+
             if (status === 'none') {
                 delete state.schedule[selectedDayKey];
             } else {
-                state.schedule[selectedDayKey] = status;
+                state.schedule[selectedDayKey] = {
+                    type: status,
+                    profit: profitVal
+                };
             }
             saveState();
             renderCalendar();
             closeDayModal();
+        }
+
+        function getTodayKey() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         }
 
         function changeAssigned(key, val) {
@@ -1529,10 +1652,11 @@
                 }
 
             } else {
-                const failStatus = document.getElementById('fail-status-select').value;
-                newMeeting.failStatus = failStatus;
+                const failStatusKey = document.getElementById('fail-status-select').value;
+                newMeeting.failStatusKey = failStatusKey;
+                const failStatusName = state.failStatuses[failStatusKey]?.name || failStatusKey;
 
-                singleReportText += `${mainProdName}\n${client}\n${failStatus}`;
+                singleReportText += `${mainProdName}\n${client}\n${failStatusName}`;
                 if (comment) {
                     singleReportText += `\nКомментарий: ${comment}`;
                 }
@@ -1580,13 +1704,13 @@
             const select = document.getElementById('fail-status-select');
             const currentVal = select.value;
             select.innerHTML = '';
-            state.failStatuses.forEach(st => {
+            for (let key in state.failStatuses) {
                 const opt = document.createElement('option');
-                opt.value = st;
-                opt.innerText = st;
+                opt.value = key;
+                opt.innerText = state.failStatuses[key].name;
                 select.appendChild(opt);
-            });
-            if (state.failStatuses.includes(currentVal)) select.value = currentVal;
+            }
+            if (state.failStatuses[currentVal]) select.value = currentVal;
         }
 
         function renderCrossCheckboxes() {
@@ -1643,28 +1767,35 @@
             const name = document.getElementById('new-item-name').value.trim();
             const price = parseInt(document.getElementById('new-item-price').value) || 0;
             const type = document.getElementById('new-item-type').value;
+            const icon = document.getElementById('new-item-icon').value.trim() || '💼';
 
             if (!name) {
                 alert("Введите название!");
                 return;
             }
 
-            const generatedId = (type === 'main' ? 'main_' : type === 'cross' ? 'cross_' : 'app_') + Date.now();
+            const generatedId = (type === 'main' ? 'main_' : type === 'cross' ? 'cross_' : type === 'app' ? 'app_' : type === 'shift_cat' ? 'shift_' : 'fail_') + Date.now();
 
             if (type === 'main') {
                 state.mainProducts[generatedId] = { name: name, price: price, assigned: 0 };
             } else if (type === 'cross') {
                 state.crossProducts[generatedId] = { name: name, price: price };
             } else if (type === 'app') {
-                state.appOptions[generatedId] = { name: name };
+                state.appOptions[generatedId] = { name: name, price: price };
             } else if (type === 'fail') {
-                if (!state.failStatuses.includes(name)) {
-                    state.failStatuses.push(name);
-                }
+                state.failStatuses[generatedId] = { name: name, price: price };
+            } else if (type === 'shift_cat') {
+                state.shiftCategories[generatedId] = { 
+                    name: name, 
+                    icon: icon, 
+                    color: "#4A90E2", 
+                    isWork: confirm("Считать этот статус как рабочий день (смену)?") 
+                };
             }
 
             document.getElementById('new-item-name').value = "";
             document.getElementById('new-item-price').value = "";
+            document.getElementById('new-item-icon').value = "";
 
             saveState();
             openSettings();
@@ -1676,17 +1807,28 @@
                 if (type === 'main') delete state.mainProducts[key];
                 else if (type === 'cross') delete state.crossProducts[key];
                 else if (type === 'app') delete state.appOptions[key];
-                else if (type === 'fail') {
-                    state.failStatuses = state.failStatuses.filter(s => s !== key);
-                }
+                else if (type === 'fail') delete state.failStatuses[key];
+                else if (type === 'shift_cat') delete state.shiftCategories[key];
                 saveState();
                 openSettings();
             }
         }
 
         function copyDayReport() {
-            copyToClipboard(document.getElementById('day-report-preview').innerText);
-            showToast("Дневной отчет скопирован!");
+            const reportText = document.getElementById('day-report-preview').innerText;
+            copyToClipboard(reportText);
+
+            const todayKey = getTodayKey();
+            if (!state.schedule[todayKey]) {
+                state.schedule[todayKey] = { type: 'work', profit: currentCalculatedTodayProfit };
+            } else {
+                state.schedule[todayKey].profit = currentCalculatedTodayProfit;
+                if (state.schedule[todayKey].type === 'none') {
+                    state.schedule[todayKey].type = 'work';
+                }
+            }
+            saveState();
+            showToast("Отчет скопирован, данные занесены в график!");
         }
 
         function copyToClipboard(text) {
@@ -1724,52 +1866,72 @@
 
         function openSettings() {
             const listContainer = document.getElementById('prices-settings-list');
-            let html = '<h3 style="font-size:14px; margin-bottom:8px; color:var(--alfa-black);">Основные продукты:</h3>';
+            let html = '<h3 style="font-size:13px; margin-bottom:6px; color:var(--alfa-black);">Основные продукты:</h3>';
             for (let key in state.mainProducts) {
                 const p = state.mainProducts[key];
                 html += `
                     <div class="setting-row">
-                        <label>${p.name}</label>
+                        <input type="text" class="setting-name-input" id="name-main-${key}" value="${p.name}">
                         <div class="price-input-wrapper">
-                            <input type="number" id="set-main-${key}" value="${p.price}">
+                            <input type="number" class="setting-price-input" id="set-main-${key}" value="${p.price}">
                             <span class="currency-sign">₽</span>
                         </div>
                         <button class="btn-remove-prod" onclick="removeCustomItem('main', '${key}')">🗑️</button>
                     </div>`;
             }
 
-            html += '<h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--alfa-black);">Кросс-продажи:</h3>';
+            html += '<h3 style="font-size:13px; margin-top:12px; margin-bottom:6px; color:var(--alfa-black);">Кросс-продажи:</h3>';
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
                 html += `
                     <div class="setting-row">
-                        <label>${cp.name}</label>
+                        <input type="text" class="setting-name-input" id="name-cross-${key}" value="${cp.name}">
                         <div class="price-input-wrapper">
-                            <input type="number" id="set-cross-${key}" value="${cp.price}">
+                            <input type="number" class="setting-price-input" id="set-cross-${key}" value="${cp.price}">
                             <span class="currency-sign">₽</span>
                         </div>
                         <button class="btn-remove-prod" onclick="removeCustomItem('cross', '${key}')">🗑️</button>
                     </div>`;
             }
 
-            html += '<h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--alfa-black);">Приложения:</h3>';
+            html += '<h3 style="font-size:13px; margin-top:12px; margin-bottom:6px; color:var(--alfa-black);">Приложения:</h3>';
             for (let key in state.appOptions) {
                 const app = state.appOptions[key];
                 html += `
                     <div class="setting-row">
-                        <label>${app.name}</label>
+                        <input type="text" class="setting-name-input" id="name-app-${key}" value="${app.name}">
+                        <div class="price-input-wrapper">
+                            <input type="number" class="setting-price-input" id="set-app-${key}" value="${app.price || 0}">
+                            <span class="currency-sign">₽</span>
+                        </div>
                         <button class="btn-remove-prod" onclick="removeCustomItem('app', '${key}')">🗑️</button>
                     </div>`;
             }
 
-            html += '<h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--alfa-black);">Статусы неуспешных встреч:</h3>';
-            state.failStatuses.forEach(st => {
+            html += '<h3 style="font-size:13px; margin-top:12px; margin-bottom:6px; color:var(--alfa-black);">Статусы неуспешных встреч:</h3>';
+            for (let key in state.failStatuses) {
+                const st = state.failStatuses[key];
                 html += `
                     <div class="setting-row">
-                        <label>${st}</label>
-                        <button class="btn-remove-prod" onclick="removeCustomItem('fail', '${st}')">🗑️</button>
+                        <input type="text" class="setting-name-input" id="name-fail-${key}" value="${st.name}">
+                        <div class="price-input-wrapper">
+                            <input type="number" class="setting-price-input" id="set-fail-${key}" value="${st.price || 0}">
+                            <span class="currency-sign">₽</span>
+                        </div>
+                        <button class="btn-remove-prod" onclick="removeCustomItem('fail', '${key}')">🗑️</button>
                     </div>`;
-            });
+            }
+
+            html += '<h3 style="font-size:13px; margin-top:12px; margin-bottom:6px; color:var(--alfa-black);">Категории смен (график):</h3>';
+            for (let key in state.shiftCategories) {
+                const cat = state.shiftCategories[key];
+                html += `
+                    <div class="setting-row">
+                        <input type="text" style="width:36px; text-align:center; padding:0;" class="setting-name-input" id="icon-cat-${key}" value="${cat.icon || '💼'}">
+                        <input type="text" class="setting-name-input" id="name-cat-${key}" value="${cat.name}">
+                        <button class="btn-remove-prod" onclick="removeCustomItem('shift_cat', '${key}')">🗑️</button>
+                    </div>`;
+            }
 
             listContainer.innerHTML = html;
             document.getElementById('settings-modal').style.display = 'block';
@@ -1777,19 +1939,41 @@
 
         function closeSettings() {
             for (let key in state.mainProducts) {
-                const input = document.getElementById(`set-main-${key}`);
-                if (input) state.mainProducts[key].price = parseInt(input.value) || 0;
+                const inputName = document.getElementById(`name-main-${key}`);
+                const inputPrice = document.getElementById(`set-main-${key}`);
+                if (inputName && inputName.value.trim()) state.mainProducts[key].name = inputName.value.trim();
+                if (inputPrice) state.mainProducts[key].price = parseInt(inputPrice.value) || 0;
             }
             for (let key in state.crossProducts) {
+                const inputName = document.getElementById(`name-cross-${key}`);
                 const inputPrice = document.getElementById(`set-cross-${key}`);
+                if (inputName && inputName.value.trim()) state.crossProducts[key].name = inputName.value.trim();
                 if (inputPrice) state.crossProducts[key].price = parseInt(inputPrice.value) || 0;
+            }
+            for (let key in state.appOptions) {
+                const inputName = document.getElementById(`name-app-${key}`);
+                const inputPrice = document.getElementById(`set-app-${key}`);
+                if (inputName && inputName.value.trim()) state.appOptions[key].name = inputName.value.trim();
+                if (inputPrice) state.appOptions[key].price = parseInt(inputPrice.value) || 0;
+            }
+            for (let key in state.failStatuses) {
+                const inputName = document.getElementById(`name-fail-${key}`);
+                const inputPrice = document.getElementById(`set-fail-${key}`);
+                if (inputName && inputName.value.trim()) state.failStatuses[key].name = inputName.value.trim();
+                if (inputPrice) state.failStatuses[key].price = parseInt(inputPrice.value) || 0;
+            }
+            for (let key in state.shiftCategories) {
+                const inputIcon = document.getElementById(`icon-cat-${key}`);
+                const inputName = document.getElementById(`name-cat-${key}`);
+                if (inputIcon) state.shiftCategories[key].icon = inputIcon.value.trim() || '💼';
+                if (inputName && inputName.value.trim()) state.shiftCategories[key].name = inputName.value.trim();
             }
             document.getElementById('settings-modal').style.display = 'none';
             saveState();
         }
 
         function confirmReset() {
-            if (confirm("Сбросить результаты дня? Проведенные встречи, доп. доход и счетчики плана на день обнулятся. Ваши добавленные продукты, настройки цен И ГРАФИК РАБОТЫ ОСТАНУТСЯ.")) {
+            if (confirm("Сбросить результаты дня? Проведенные встречи, доп. доход и счетчики плана на день обнулятся. Ваши добавленные продукты, настройки цен, сохраненный доход за прошлые дни И ГРАФИК РАБОТЫ ОСТАНУТСЯ.")) {
                 state.meetings = []; 
                 state.extraIncome = 0;
                 state.dayPlanTargets.forEach(t => t.sold = 0);
