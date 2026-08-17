@@ -33,6 +33,113 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
+        /* СВЕТЛЫЙ ЭКРАН ЗАГРУЗКИ */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+        }
+
+        #splash-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .splash-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .splash-logo-box {
+            position: relative;
+            margin-bottom: 14px;
+            animation: splashPulse 2s infinite ease-in-out;
+        }
+
+        .splash-icon {
+            font-size: 56px;
+            filter: drop-shadow(0 6px 16px rgba(239, 49, 36, 0.25));
+        }
+
+        .splash-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #0B0F14;
+            letter-spacing: -1px;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: splashFadeUp 0.8s 0.2s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .splash-title span {
+            color: var(--alfa-red);
+        }
+
+        .splash-subtitle {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8C95A3;
+            margin-top: 6px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: splashFadeUp 0.8s 0.5s forwards cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .splash-loader {
+            width: 52px;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+            margin-top: 28px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            animation: splashFadeUp 0.5s 0.6s forwards;
+        }
+
+        .splash-loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--alfa-red);
+            animation: splashLoading 1.2s infinite ease-in-out;
+        }
+
+        @keyframes splashFadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes splashPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+
+        @keyframes splashLoading {
+            0% { left: -100%; }
+            50% { left: 30%; }
+            100% { left: 100%; }
+        }
+
         body {
             background-color: var(--alfa-bg);
             color: var(--alfa-text);
@@ -839,6 +946,18 @@
 </head>
 <body>
 
+    <!-- СВЕТЛЫЙ ЭКРАН ЗАГРУЗКИ -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo-box">
+                <div class="splash-icon">🅰️</div>
+            </div>
+            <div class="splash-title">Alfa<span>Calc</span></div>
+            <div class="splash-subtitle">by Kosin</div>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
     <header>
         <div class="header-container">
             <div class="logo-title">
@@ -1038,9 +1157,7 @@
             </div>
 
             <p style="font-size:13px; color:var(--alfa-muted); margin-bottom:6px;">Выберите статус/категорию:</p>
-            <div class="day-actions-grid" id="day-categories-modal-grid">
-                <!-- Категории генерируются динамически -->
-            </div>
+            <div class="day-actions-grid" id="day-categories-modal-grid"></div>
 
             <button class="btn-primary" style="margin-top:12px; background:var(--alfa-black);" onclick="saveDayDetails('none')">Очистить день</button>
             <button class="btn-delete" style="width:100%; margin-top:8px;" onclick="closeDayModal()">Отмена</button>
@@ -1145,7 +1262,7 @@
             failStatuses: JSON.parse(JSON.stringify(defaultFailStatuses)),
             shiftCategories: JSON.parse(JSON.stringify(defaultShiftCategories)),
             meetings: [],
-            schedule: {}, // { "YYYY-MM-DD": { type: "work" | "trip" | ..., profit: 1200 } }
+            schedule: {},
             dayPlanTargets: [],
             extraIncome: 0
         };
@@ -1168,7 +1285,16 @@
                     if (parsed.mainProducts) state.mainProducts = parsed.mainProducts;
                     if (parsed.crossProducts) state.crossProducts = parsed.crossProducts;
                     if (parsed.appOptions) state.appOptions = parsed.appOptions;
-                    if (parsed.failStatuses) state.failStatuses = parsed.failStatuses;
+                    if (parsed.failStatuses) {
+                        if (Array.isArray(parsed.failStatuses)) {
+                            state.failStatuses = {};
+                            parsed.failStatuses.forEach((st, idx) => {
+                                state.failStatuses['fail_' + idx] = { name: st, price: 0 };
+                            });
+                        } else {
+                            state.failStatuses = parsed.failStatuses;
+                        }
+                    }
                     if (parsed.shiftCategories) state.shiftCategories = parsed.shiftCategories;
                     if (parsed.meetings) state.meetings = parsed.meetings;
                     
@@ -1190,6 +1316,12 @@
             renderAll();
             renderCalendar();
             renderDayPlan();
+
+            // Плавное скрытие заставки
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) splash.classList.add('hide');
+            }, 1800);
         }
 
         function saveState() {
