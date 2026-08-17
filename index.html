@@ -503,7 +503,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             background: var(--alfa-bg);
             padding: 8px 12px;
             border-radius: 12px;
@@ -783,7 +783,6 @@
             font-weight: 600;
         }
 
-        /* ВСПОМОГАТЕЛЬНОЕ УВЕДОМЛЕНИЕ (TOAST) */
         .toast {
             position: fixed;
             bottom: 85px;
@@ -819,7 +818,7 @@
                 <div class="subtitle">by Kosin</div>
             </div>
             <div class="header-actions">
-                <button class="btn-icon" onclick="openSettings()" title="Настройки цен">⚙️</button>
+                <button class="btn-icon" onclick="openSettings()" title="Настройки">⚙️</button>
                 <button class="btn-icon" onclick="confirmReset()" title="Сбросить день">🔄</button>
             </div>
         </div>
@@ -870,36 +869,14 @@
                 
                 <div class="form-group">
                     <label>Установка приложения</label>
-                    <div class="checkbox-grid">
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="app-android">
-                            <span class="checkbox-label">Андроид</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="app-ios">
-                            <span class="checkbox-label">iOS</span>
-                        </label>
-                        <label class="checkbox-item">
-                            <input type="checkbox" id="app-x5">
-                            <span class="checkbox-label">X5 (Пятерочка)</span>
-                        </label>
-                    </div>
+                    <div class="checkbox-grid" id="apps-container"></div>
                 </div>
             </div>
 
             <div id="fail-block" style="display: none;">
                 <div class="form-group">
                     <label for="fail-status-select">Статус неуспешной встречи</label>
-                    <select id="fail-status-select">
-                        <option value="НДЗ">НДЗ</option>
-                        <option value="Перенос встречи">Перенос встречи</option>
-                        <option value="Отказ банка/911">Отказ банка/911</option>
-                        <option value="Отказ банка до встречи">Отказ банка до встречи</option>
-                        <option value="Отказ клиента до встречи">Отказ клиента до встречи</option>
-                        <option value="Отказ клиента на встрече">Отказ клиента на встрече</option>
-                        <option value="Отмена встречи">Отмена встречи</option>
-                        <option value="Дубль">Дубль</option>
-                    </select>
+                    <select id="fail-status-select"></select>
                 </div>
             </div>
 
@@ -1024,27 +1001,29 @@
         </div>
     </div>
 
-    <!-- Модалка настроек цен -->
+    <!-- Модалка настроек -->
     <div class="modal" id="settings-modal">
         <div class="modal-content">
-            <div class="card-title">⚙️ Управление матрицей продуктов</div>
+            <div class="card-title">⚙️ Настройки и матрица</div>
             
             <div class="add-product-form">
-                <h4>➕ Добавить новый продукт</h4>
+                <h4>➕ Добавить новый элемент</h4>
                 <div class="add-inline-group">
-                    <input type="text" id="new-prod-name" placeholder="Название продукта" style="flex: 2;">
-                    <input type="number" id="new-prod-price" placeholder="Цена (₽)" style="flex: 1;">
+                    <input type="text" id="new-item-name" placeholder="Название (продукта, приложения или статуса)" style="flex: 2;">
+                    <input type="number" id="new-item-price" placeholder="Цена (₽)" style="flex: 1;">
                 </div>
                 <div class="add-inline-group">
-                    <select id="new-prod-type" style="flex: 1.5;">
+                    <select id="new-item-type" style="flex: 1.5;">
                         <option value="main">Основной продукт</option>
                         <option value="cross">Кросс-продажа</option>
+                        <option value="app">Приложение</option>
+                        <option value="fail">Статус неуспешной</option>
                     </select>
-                    <button class="btn-primary" style="padding: 8px; width: auto; border-radius: 8px; font-size:13px; flex: 0.5;" onclick="addNewProduct()">ОК</button>
+                    <button class="btn-primary" style="padding: 8px; width: auto; border-radius: 8px; font-size:13px; flex: 0.5;" onclick="addNewCustomItem()">ОК</button>
                 </div>
             </div>
 
-            <div style="max-height: 320px; overflow-y: auto; margin-bottom: 20px;" id="prices-settings-list"></div>
+            <div style="max-height: 360px; overflow-y: auto; margin-bottom: 20px;" id="prices-settings-list"></div>
             <button class="btn-primary" onclick="closeSettings()">Сохранить и закрыть</button>
         </div>
     </div>
@@ -1086,9 +1065,28 @@
             "cross_ns": { name: "НС/ НС Миллионер", price: 0 }
         };
 
+        const defaultAppOptions = {
+            "app_android": { name: "Андроид" },
+            "app_ios": { name: "iOS" },
+            "app_x5": { name: "X5 (Пятерочка)" }
+        };
+
+        const defaultFailStatuses = [
+            "НДЗ",
+            "Перенос встречи",
+            "Отказ банка/911",
+            "Отказ банка до встречи",
+            "Отказ клиента до встречи",
+            "Отказ клиента на встрече",
+            "Отмена встречи",
+            "Дубль"
+        ];
+
         let state = {
             mainProducts: JSON.parse(JSON.stringify(defaultMainProducts)),
             crossProducts: JSON.parse(JSON.stringify(defaultCrossProducts)),
+            appOptions: JSON.parse(JSON.stringify(defaultAppOptions)),
+            failStatuses: JSON.parse(JSON.stringify(defaultFailStatuses)),
             meetings: [],
             schedule: {},
             dayPlanTargets: [],
@@ -1101,29 +1099,21 @@
         let toastTimeout = null;
 
         function loadState() {
-            const saved = localStorage.getItem('alfacalc_state_v12');
+            const saved = localStorage.getItem('alfacalc_state_v14');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
                     if (parsed.mainProducts) state.mainProducts = parsed.mainProducts;
+                    if (parsed.crossProducts) state.crossProducts = parsed.crossProducts;
+                    if (parsed.appOptions) state.appOptions = parsed.appOptions;
+                    if (parsed.failStatuses) state.failStatuses = parsed.failStatuses;
                     if (parsed.meetings) state.meetings = parsed.meetings;
                     if (parsed.schedule) state.schedule = parsed.schedule;
                     if (parsed.dayPlanTargets) state.dayPlanTargets = parsed.dayPlanTargets;
                     if (parsed.extraIncome !== undefined) state.extraIncome = parsed.extraIncome;
-                    
-                    if (parsed.crossProducts) {
-                        state.crossProducts = JSON.parse(JSON.stringify(defaultCrossProducts));
-                        for (let k in parsed.crossProducts) {
-                            if (state.crossProducts[k]) {
-                                state.crossProducts[k].price = parsed.crossProducts[k].price;
-                            }
-                        }
-                    }
                 } catch (e) {
                     console.error("Ошибка загрузки данных", e);
                 }
-            } else {
-                state.crossProducts = JSON.parse(JSON.stringify(defaultCrossProducts));
             }
             renderAll();
             renderCalendar();
@@ -1131,7 +1121,7 @@
         }
 
         function saveState() {
-            localStorage.setItem('alfacalc_state_v12', JSON.stringify(state));
+            localStorage.setItem('alfacalc_state_v14', JSON.stringify(state));
             renderAll();
         }
 
@@ -1161,12 +1151,14 @@
 
         function renderAll() {
             const currentIssued = {};
-            const currentFailStatuses = { "НДЗ": 0, "Перенос встречи": 0, "Отказ банка/911": 0, "Отказ банка до встречи": 0, "Отказ клиента до встречи": 0, "Отказ клиента на встрече": 0, "Отмена встречи": 0, "Дубль": 0 };
+            const currentFailCounts = {};
             const currentCrossCounts = {};
-            const currentApps = { android: 0, ios: 0, x5: 0 };
+            const currentAppCounts = {};
             
             for (let k in state.mainProducts) currentIssued[k] = 0;
             for (let k in state.crossProducts) currentCrossCounts[k] = 0;
+            for (let k in state.appOptions) currentAppCounts[k] = 0;
+            state.failStatuses.forEach(st => currentFailCounts[st] = 0);
 
             let totalProfit = state.extraIncome || 0;
             let potentialProfit = 0;
@@ -1176,16 +1168,22 @@
                     if (currentIssued[m.mainProductKey] !== undefined) currentIssued[m.mainProductKey]++;
                     totalProfit += state.mainProducts[m.mainProductKey] ? state.mainProducts[m.mainProductKey].price : 0;
                     
-                    m.crossKeys.forEach(ck => {
-                        if (currentCrossCounts[ck] !== undefined) currentCrossCounts[ck]++;
-                        totalProfit += state.crossProducts[ck] ? state.crossProducts[ck].price : 0;
-                    });
+                    if (m.crossKeys) {
+                        m.crossKeys.forEach(ck => {
+                            if (currentCrossCounts[ck] !== undefined) currentCrossCounts[ck]++;
+                            totalProfit += state.crossProducts[ck] ? state.crossProducts[ck].price : 0;
+                        });
+                    }
 
-                    if (m.apps.android) currentApps.android++;
-                    if (m.apps.ios) currentApps.ios++;
-                    if (m.apps.x5) currentApps.x5++;
+                    if (m.appKeys) {
+                        m.appKeys.forEach(ak => {
+                            if (currentAppCounts[ak] !== undefined) currentAppCounts[ak]++;
+                        });
+                    }
                 } else {
-                    if (currentFailStatuses[m.failStatus] !== undefined) currentFailStatuses[m.failStatus]++;
+                    if (currentFailCounts[m.failStatus] !== undefined) {
+                        currentFailCounts[m.failStatus]++;
+                    }
                 }
             });
 
@@ -1218,6 +1216,8 @@
 
             renderSelects();
             renderCrossCheckboxes();
+            renderAppCheckboxes();
+            renderFailStatusSelect();
 
             const historyContainer = document.getElementById('history-list-container');
             historyContainer.innerHTML = '';
@@ -1228,7 +1228,7 @@
                     const item = document.createElement('div');
                     item.className = 'history-item';
                     let detailsText = m.isSuccess ? `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey}` : `Продукт: ${state.mainProducts[m.mainProductKey]?.name || m.mainProductKey} • Статус: ${m.failStatus}`;
-                    if (m.isSuccess && m.crossKeys.length > 0) {
+                    if (m.isSuccess && m.crossKeys && m.crossKeys.length > 0) {
                         detailsText += ` • Кроссы: ${m.crossKeys.map(ck => state.crossProducts[ck]?.name).filter(Boolean).join(', ')}`;
                     }
                     if (m.comment) detailsText += ` • <i>"${m.comment}"</i>`;
@@ -1254,9 +1254,9 @@
             }
 
             report += `\nСтатусы встреч\n`;
-            for (let status in currentFailStatuses) {
-                report += `${status}: ${currentFailStatuses[status]}\n`;
-            }
+            state.failStatuses.forEach(st => {
+                report += `${st}: ${currentFailCounts[st] || 0}\n`;
+            });
 
             report += `\nКросс-продажи\n`;
             for (let key in state.crossProducts) {
@@ -1265,9 +1265,9 @@
             }
 
             report += `\nУстановка приложения\n`;
-            report += `Андроид: ${currentApps.android}\n`;
-            report += `iOS: ${currentApps.ios}\n`;
-            report += `X5 (пятерочка): ${currentApps.x5}\n`;
+            for (let key in state.appOptions) {
+                report += `${state.appOptions[key].name}: ${currentAppCounts[key] || 0}\n`;
+            }
 
             if (state.extraIncome > 0) {
                 report += `\nДополнительный доход: ${state.extraIncome} ₽\n`;
@@ -1496,7 +1496,7 @@
                 comment: comment,
                 isSuccess: isCurrentSuccess,
                 crossKeys: [],
-                apps: { android: false, ios: false, x5: false }
+                appKeys: []
             };
 
             let singleReportText = "";
@@ -1513,9 +1513,12 @@
                     }
                 }
 
-                if (document.getElementById('app-android').checked) newMeeting.apps.android = true;
-                if (document.getElementById('app-ios').checked) newMeeting.apps.ios = true;
-                if (document.getElementById('app-x5').checked) newMeeting.apps.x5 = true;
+                for (let key in state.appOptions) {
+                    const cb = document.getElementById(`app-opt-${key}`);
+                    if (cb && cb.checked) {
+                        newMeeting.appKeys.push(key);
+                    }
+                }
 
                 if (comment) {
                     singleReportText += `Комментарий: ${comment}`;
@@ -1547,9 +1550,10 @@
                 const cb = document.getElementById(`cross-${key}`);
                 if (cb) cb.checked = false;
             }
-            document.getElementById('app-android').checked = false;
-            document.getElementById('app-ios').checked = false;
-            document.getElementById('app-x5').checked = false;
+            for (let key in state.appOptions) {
+                const cb = document.getElementById(`app-opt-${key}`);
+                if (cb) cb.checked = false;
+            }
         }
 
         function deleteMeeting(id) {
@@ -1572,6 +1576,19 @@
             if (state.mainProducts[currentVal]) select.value = currentVal;
         }
 
+        function renderFailStatusSelect() {
+            const select = document.getElementById('fail-status-select');
+            const currentVal = select.value;
+            select.innerHTML = '';
+            state.failStatuses.forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.innerText = st;
+                select.appendChild(opt);
+            });
+            if (state.failStatuses.includes(currentVal)) select.value = currentVal;
+        }
+
         function renderCrossCheckboxes() {
             const container = document.getElementById('cross-container');
             const checkedStates = {};
@@ -1583,7 +1600,6 @@
             container.innerHTML = '';
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
-                
                 const label = document.createElement('label');
                 label.className = 'checkbox-item';
                 label.innerHTML = `
@@ -1598,37 +1614,70 @@
             }
         }
 
-        function addNewProduct() {
-            const name = document.getElementById('new-prod-name').value.trim();
-            const price = parseInt(document.getElementById('new-prod-price').value) || 0;
-            const type = document.getElementById('new-prod-type').value;
+        function renderAppCheckboxes() {
+            const container = document.getElementById('apps-container');
+            const checkedStates = {};
+            for (let key in state.appOptions) {
+                const cb = document.getElementById(`app-opt-${key}`);
+                if (cb) checkedStates[key] = cb.checked;
+            }
+
+            container.innerHTML = '';
+            for (let key in state.appOptions) {
+                const app = state.appOptions[key];
+                const label = document.createElement('label');
+                label.className = 'checkbox-item';
+                label.innerHTML = `
+                    <input type="checkbox" id="app-opt-${key}">
+                    <span class="checkbox-label">${app.name}</span>
+                `;
+                container.appendChild(label);
+
+                if (checkedStates[key]) {
+                    document.getElementById(`app-opt-${key}`).checked = true;
+                }
+            }
+        }
+
+        function addNewCustomItem() {
+            const name = document.getElementById('new-item-name').value.trim();
+            const price = parseInt(document.getElementById('new-item-price').value) || 0;
+            const type = document.getElementById('new-item-type').value;
 
             if (!name) {
-                alert("Введите название продукта!");
+                alert("Введите название!");
                 return;
             }
 
-            const generatedId = (type === 'main' ? 'main_' : 'cross_') + Date.now();
+            const generatedId = (type === 'main' ? 'main_' : type === 'cross' ? 'cross_' : 'app_') + Date.now();
 
             if (type === 'main') {
                 state.mainProducts[generatedId] = { name: name, price: price, assigned: 0 };
-            } else {
+            } else if (type === 'cross') {
                 state.crossProducts[generatedId] = { name: name, price: price };
+            } else if (type === 'app') {
+                state.appOptions[generatedId] = { name: name };
+            } else if (type === 'fail') {
+                if (!state.failStatuses.includes(name)) {
+                    state.failStatuses.push(name);
+                }
             }
 
-            document.getElementById('new-prod-name').value = "";
-            document.getElementById('new-prod-price').value = 0;
+            document.getElementById('new-item-name').value = "";
+            document.getElementById('new-item-price').value = "";
 
             saveState();
             openSettings();
-            showToast("Продукт успешно добавлен!");
+            showToast("Элемент успешно добавлен!");
         }
 
-        function removeProduct(type, key) {
-            if (confirm("Удалить продукт?")) {
+        function removeCustomItem(type, key) {
+            if (confirm("Удалить элемент?")) {
                 if (type === 'main') delete state.mainProducts[key];
-                else {
-                    delete state.crossProducts[key];
+                else if (type === 'cross') delete state.crossProducts[key];
+                else if (type === 'app') delete state.appOptions[key];
+                else if (type === 'fail') {
+                    state.failStatuses = state.failStatuses.filter(s => s !== key);
                 }
                 saveState();
                 openSettings();
@@ -1675,8 +1724,7 @@
 
         function openSettings() {
             const listContainer = document.getElementById('prices-settings-list');
-            let html = '<h3 style="font-size:14px; margin-bottom:10px; color:var(--alfa-black);">Основные продукты:</h3>';
-            
+            let html = '<h3 style="font-size:14px; margin-bottom:8px; color:var(--alfa-black);">Основные продукты:</h3>';
             for (let key in state.mainProducts) {
                 const p = state.mainProducts[key];
                 html += `
@@ -1686,11 +1734,11 @@
                             <input type="number" id="set-main-${key}" value="${p.price}">
                             <span class="currency-sign">₽</span>
                         </div>
-                        <button class="btn-remove-prod" onclick="removeProduct('main', '${key}')">🗑️</button>
+                        <button class="btn-remove-prod" onclick="removeCustomItem('main', '${key}')">🗑️</button>
                     </div>`;
             }
 
-            html += '<h3 style="font-size:14px; margin-top:20px; margin-bottom:10px; color:var(--alfa-black);">Кросс-продажи:</h3>';
+            html += '<h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--alfa-black);">Кросс-продажи:</h3>';
             for (let key in state.crossProducts) {
                 const cp = state.crossProducts[key];
                 html += `
@@ -1700,9 +1748,28 @@
                             <input type="number" id="set-cross-${key}" value="${cp.price}">
                             <span class="currency-sign">₽</span>
                         </div>
-                        <button class="btn-remove-prod" onclick="removeProduct('cross', '${key}')">🗑️</button>
+                        <button class="btn-remove-prod" onclick="removeCustomItem('cross', '${key}')">🗑️</button>
                     </div>`;
             }
+
+            html += '<h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--alfa-black);">Приложения:</h3>';
+            for (let key in state.appOptions) {
+                const app = state.appOptions[key];
+                html += `
+                    <div class="setting-row">
+                        <label>${app.name}</label>
+                        <button class="btn-remove-prod" onclick="removeCustomItem('app', '${key}')">🗑️</button>
+                    </div>`;
+            }
+
+            html += '<h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--alfa-black);">Статусы неуспешных встреч:</h3>';
+            state.failStatuses.forEach(st => {
+                html += `
+                    <div class="setting-row">
+                        <label>${st}</label>
+                        <button class="btn-remove-prod" onclick="removeCustomItem('fail', '${st}')">🗑️</button>
+                    </div>`;
+            });
 
             listContainer.innerHTML = html;
             document.getElementById('settings-modal').style.display = 'block';
